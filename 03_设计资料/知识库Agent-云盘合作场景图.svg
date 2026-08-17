@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="980" viewBox="0 0 1600 980">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#f7f9fc"/><stop offset="1" stop-color="#eef4ff"/></linearGradient>
+    <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#1565d8"/><stop offset="1" stop-color="#3b82f6"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#173b70" flood-opacity=".12"/></filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#7890ad"/></marker>
+  </defs>
+  <rect width="1600" height="980" fill="url(#bg)"/>
+  <text x="90" y="92" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#102a43">知识库垂直 Agent × 云盘：从文件到工作结果</text>
+  <text x="92" y="132" font-family="Arial, sans-serif" font-size="20" fill="#58708d">探索重点：一个可信上下文，如何支撑可复核、可回存的领域工作流</text>
+  <g filter="url(#shadow)">
+    <rect x="90" y="205" rx="24" width="300" height="210" fill="#fff"/>
+    <rect x="450" y="180" rx="24" width="360" height="260" fill="url(#blue)"/>
+    <rect x="870" y="180" rx="24" width="300" height="260" fill="#fff"/>
+    <rect x="1230" y="205" rx="24" width="280" height="210" fill="#fff"/>
+  </g>
+  <text x="125" y="255" font-family="Arial" font-size="25" font-weight="700" fill="#102a43">1 业务问题</text>
+  <text x="125" y="300" font-family="Arial" font-size="21" fill="#36536f">票据 / 合同 / 制度</text>
+  <text x="125" y="338" font-family="Arial" font-size="21" fill="#36536f">规则分散、版本混乱</text>
+  <text x="125" y="376" font-family="Arial" font-size="21" fill="#36536f">人工复核、难留痕</text>
+  <text x="490" y="250" font-family="Arial" font-size="25" font-weight="700" fill="#fff">2 云盘可信上下文</text>
+  <text x="490" y="295" font-family="Arial" font-size="21" fill="#e4efff">文件与文件夹 · 权限</text>
+  <text x="490" y="332" font-family="Arial" font-size="21" fill="#e4efff">版本 · 组织关系 · 历史</text>
+  <text x="490" y="369" font-family="Arial" font-size="21" fill="#e4efff">监听 · 回存 · 审计</text>
+  <text x="910" y="250" font-family="Arial" font-size="25" font-weight="700" fill="#102a43">3 垂直 Agent</text>
+  <text x="910" y="295" font-family="Arial" font-size="21" fill="#36536f">检索知识与规则</text>
+  <text x="910" y="332" font-family="Arial" font-size="21" fill="#36536f">判断、编排、调用工具</text>
+  <text x="910" y="369" font-family="Arial" font-size="21" fill="#36536f">推动下一步任务</text>
+  <text x="1270" y="255" font-family="Arial" font-size="25" font-weight="700" fill="#102a43">4 工作结果</text>
+  <text x="1270" y="300" font-family="Arial" font-size="21" fill="#36536f">结论 + 引用</text>
+  <text x="1270" y="338" font-family="Arial" font-size="21" fill="#36536f">异常 + 复核队列</text>
+  <text x="1270" y="376" font-family="Arial" font-size="21" fill="#36536f">报告回存 + 审计</text>
+  <path d="M390 310 H445" stroke="#7890ad" stroke-width="5" marker-end="url(#arrow)"/>
+  <path d="M810 310 H865" stroke="#7890ad" stroke-width="5" marker-end="url(#arrow)"/>
+  <path d="M1170 310 H1225" stroke="#7890ad" stroke-width="5" marker-end="url(#arrow)"/>
+  <text x="90" y="535" font-family="Arial" font-size="27" font-weight="700" fill="#102a43">优先场景</text>
+  <g filter="url(#shadow)">
+    <rect x="90" y="580" rx="20" width="430" height="230" fill="#fff"/>
+    <rect x="585" y="580" rx="20" width="430" height="230" fill="#fff"/>
+    <rect x="1080" y="580" rx="20" width="430" height="230" fill="#fff"/>
+  </g>
+  <rect x="90" y="580" rx="20" width="430" height="12" fill="#1565d8"/>
+  <rect x="585" y="580" rx="20" width="430" height="12" fill="#2d9d78"/>
+  <rect x="1080" y="580" rx="20" width="430" height="12" fill="#a174e8"/>
+  <text x="125" y="645" font-family="Arial" font-size="27" font-weight="700" fill="#102a43">A1 票据 / 报销核验</text>
+  <text x="125" y="692" font-family="Arial" font-size="20" fill="#36536f">批量抽取 → 规则校验</text>
+  <text x="125" y="728" font-family="Arial" font-size="20" fill="#36536f">异常分级 → 复核 → 回存</text>
+  <text x="125" y="764" font-family="Arial" font-size="18" fill="#7890ad">首选：闭环清晰、结果可量化</text>
+  <text x="620" y="645" font-family="Arial" font-size="27" font-weight="700" fill="#102a43">A2 合同审阅</text>
+  <text x="620" y="692" font-family="Arial" font-size="20" fill="#36536f">类型识别 → 条款清单</text>
+  <text x="620" y="728" font-family="Arial" font-size="20" fill="#36536f">版本对比 → 风险复核</text>
+  <text x="620" y="764" font-family="Arial" font-size="18" fill="#7890ad">高价值：需强调人工确认</text>
+  <text x="1115" y="645" font-family="Arial" font-size="27" font-weight="700" fill="#102a43">B 投标 / 交付 / HR</text>
+  <text x="1115" y="692" font-family="Arial" font-size="20" fill="#36536f">材料组装、缺件追踪</text>
+  <text x="1115" y="728" font-family="Arial" font-size="20" fill="#36536f">制度答疑、项目验收</text>
+  <text x="1115" y="764" font-family="Arial" font-size="18" fill="#7890ad">二期：复用底座能力</text>
+  <text x="90" y="900" font-family="Arial" font-size="20" fill="#58708d">产品建议：云盘内置入口 + 独立垂直工作台；先证明一个闭环，再抽象成平台</text>
+</svg>

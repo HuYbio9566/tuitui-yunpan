@@ -1,16 +1,32 @@
-# Yunpan AI Tools Demo
+# 推推-云盘工具项目
 
-360 AI 企业知识库云盘工具原型，包含调研报告、已有工具对照、新增 AI 工具及各工具独立交互页面。
+这是 360 企业云盘 AI 工具原型项目。
 
-## Access
+## 老板先看
 
-This is a private repository. Authorized collaborators can access the source at:
+请先打开：`01_老板先看/从这里开始.md`。
 
-https://github.com/HuYbio9566/yunpan
+## 项目管理
 
-Public prototype:
+项目状态、任务、版本和决策在：`02_项目管理/`。
 
-- Tool center: https://yunpan-blush.vercel.app/
-- Multi-file Q&A: https://yunpan-blush.vercel.app/multi-file-qa.html
+## 文件夹怎么理解
 
-To preview locally, serve the repository root with any static HTTP server and open `index.html`.
+- `01_老板先看/`：只看中文入口。
+- `02_项目管理/`：项目状态、任务、版本、决策和模板。
+- `03_设计资料/`：页面截图和设计参考。
+- 根目录下的英文文件：网站程序文件，电脑运行需要，老板不用打开。
+
+## 设计资料
+
+页面截图在：`03_设计资料/截图/`。
+
+## 网站演示
+
+网页首页在 `05_网站程序（电脑使用）/index.html`。根目录的 `index.html` 只是中文项目入口，会自动跳转到网站。
+
+根目录下只保留中文项目分类；网站程序已集中在 `05_网站程序（电脑使用）/`，不要手动修改里面的文件名。
+
+## GitHub
+
+[HuYbio9566/tuitui-yunpan](https://github.com/HuYbio9566/tuitui-yunpan)

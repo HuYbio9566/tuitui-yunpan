@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="知识库垂直场景 Agent 与云盘合作机会的需求探索可视化阅读界面">
+  <title>知识库垂直 Agent · 需求探索</title>
+  <style>
+    :root {
+      --paper: #f4f1e9;
+      --paper-deep: #e9e4d9;
+      --ink: #202a2b;
+      --muted: #6b7370;
+      --line: rgba(32, 42, 43, .14);
+      --line-strong: rgba(32, 42, 43, .28);
+      --rust: #bd513b;
+      --rust-dark: #8e362a;
+      --teal: #0c756e;
+      --teal-soft: #d6e6df;
+      --gold: #c39131;
+      --gold-soft: #efe0b7;
+      --blue: #416777;
+      --white: #fbfaf6;
+      --shadow: 0 18px 44px rgba(47, 41, 31, .10), 0 2px 6px rgba(47, 41, 31, .06);
+      --radius: 18px;
+      --sans: "Avenir Next", "Noto Sans SC", "PingFang SC", sans-serif;
+      --serif: "Iowan Old Style", "Noto Serif SC", "Songti SC", serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: var(--sans);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .25;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+      z-index: 10;
+    }
+    a { color: inherit; }
+    button { font: inherit; }
+    .app { display: grid; grid-template-columns: 252px 1fr; min-height: 100vh; }
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(244, 241, 233, .86);
+      z-index: 4;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 42px; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 10px 10px 10px 3px; background: var(--ink); color: var(--paper); display: grid; place-items: center; font-weight: 800; font-size: 13px; letter-spacing: -.04em; }
+    .brand strong { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; }
+    .brand small { display: block; color: var(--muted); font-size: 10px; margin-top: 2px; }
+    .nav-label { color: var(--muted); text-transform: uppercase; letter-spacing: .16em; font-size: 10px; margin: 0 0 12px 10px; }
+    .nav { display: grid; gap: 4px; }
+    .nav a { display: flex; align-items: center; gap: 10px; padding: 10px 10px; border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 13px; transition: background .2s, color .2s, transform .2s; }
+    .nav a:hover, .nav a.active { color: var(--ink); background: var(--white); transform: translateX(2px); }
+    .nav a.active { box-shadow: inset 3px 0 0 var(--rust); }
+    .nav-num { width: 18px; color: var(--rust); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .side-note { position: absolute; left: 22px; right: 22px; bottom: 28px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .side-note strong { color: var(--ink); display: block; margin-bottom: 4px; font-size: 12px; }
+    main { min-width: 0; }
+    .topbar { height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 6vw; border-bottom: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .crumb { display: flex; align-items: center; gap: 8px; }
+    .crumb span { color: var(--rust); }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .status { display: inline-flex; align-items: center; gap: 6px; }
+    .status i { width: 7px; height: 7px; border-radius: 99px; background: var(--gold); display: inline-block; }
+    .print-btn { border: 1px solid var(--line-strong); border-radius: 999px; padding: 7px 12px; background: transparent; color: var(--ink); cursor: pointer; font-size: 11px; transition: background .2s, color .2s; }
+    .print-btn:hover { background: var(--ink); color: var(--paper); }
+    .wrap { width: min(1180px, calc(100% - 10vw)); margin: 0 auto; }
+    .hero { padding: 78px 0 74px; display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(300px, .75fr); gap: 8vw; align-items: end; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--rust); text-transform: uppercase; letter-spacing: .18em; font-weight: 700; font-size: 11px; }
+    .eyebrow::before { content: ""; width: 28px; height: 2px; background: var(--rust); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin: 18px 0 22px; max-width: 730px; font-family: var(--serif); font-size: clamp(42px, 6vw, 82px); line-height: .98; letter-spacing: -.055em; font-weight: 600; text-wrap: balance; }
+    .hero-lead { max-width: 620px; color: #4d5855; font-size: 18px; line-height: 1.75; text-wrap: pretty; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 30px; }
+    .meta-chip { padding: 7px 10px; border: 1px solid var(--line); border-radius: 99px; color: var(--muted); font-size: 11px; background: rgba(251, 250, 246, .5); }
+    .hero-aside { position: relative; padding: 28px; border-radius: var(--radius); background: var(--ink); color: var(--paper); box-shadow: var(--shadow); overflow: hidden; }
+    .hero-aside::after { content: "01"; position: absolute; right: -12px; bottom: -38px; color: rgba(244, 241, 233, .08); font-family: var(--serif); font-size: 150px; line-height: 1; }
+    .aside-label { color: #bdc8c3; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; }
+    .hero-aside h2 { margin: 12px 0 18px; max-width: 290px; color: white; font-family: var(--serif); font-size: 28px; line-height: 1.15; letter-spacing: -.03em; }
+    .hero-aside p { position: relative; z-index: 1; margin-bottom: 0; color: #d8dfdb; font-size: 13px; line-height: 1.75; }
+    .section { padding: 74px 0; border-top: 1px solid var(--line); }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 30px; }
+    .section-kicker { color: var(--rust); font-size: 11px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; margin-bottom: 10px; }
+    h2.section-title { margin: 0; font-family: var(--serif); font-size: clamp(30px, 4vw, 48px); letter-spacing: -.045em; line-height: 1.05; }
+    .section-intro { max-width: 430px; color: var(--muted); font-size: 14px; margin: 0; }
+    .signal-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .signal { min-height: 170px; padding: 22px; background: var(--white); border-radius: 14px; border: 1px solid var(--line); }
+    .signal-mark { color: var(--rust); font-size: 22px; font-family: var(--serif); }
+    .signal h3 { margin: 22px 0 8px; font-size: 16px; }
+    .signal p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .opportunity-head { display: flex; align-items: center; justify-content: space-between; margin: 50px 0 18px; }
+    .opportunity-head h3 { margin: 0; font-size: 16px; }
+    .filters { display: flex; gap: 5px; }
+    .filter { border: 1px solid var(--line); padding: 6px 10px; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; font-size: 11px; }
+    .filter:hover, .filter.is-selected { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+    .scenario-list { display: grid; gap: 9px; }
+    .scenario { border: 1px solid var(--line); border-radius: 14px; overflow: hidden; background: rgba(251, 250, 246, .62); transition: border-color .2s, box-shadow .2s, opacity .2s; }
+    .scenario[hidden] { display: none; }
+    .scenario.open { border-color: var(--line-strong); box-shadow: 0 10px 30px rgba(47, 41, 31, .07); }
+    .scenario-toggle { width: 100%; display: grid; grid-template-columns: 48px minmax(0, 1fr) auto 22px; align-items: center; gap: 14px; border: 0; padding: 18px 20px; text-align: left; background: transparent; color: var(--ink); cursor: pointer; }
+    .scenario-toggle:hover { background: rgba(255, 255, 255, .45); }
+    .scenario-code { color: var(--rust); font-family: var(--serif); font-size: 24px; }
+    .scenario-title { font-weight: 700; font-size: 15px; }
+    .scenario-sub { margin-top: 3px; color: var(--muted); font-size: 12px; }
+    .tier { padding: 5px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+    .tier-a { color: var(--rust-dark); background: #f1d8cf; }
+    .tier-b { color: #705a1f; background: var(--gold-soft); }
+    .tier-c { color: var(--blue); background: #dbe6e7; }
+    .chevron { color: var(--muted); transition: transform .2s; font-size: 18px; }
+    .scenario.open .chevron { transform: rotate(45deg); }
+    .scenario-detail { display: none; padding: 0 20px 22px 82px; }
+    .scenario.open .scenario-detail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; animation: rise .22s ease both; }
+    .detail-block { padding-top: 16px; border-top: 1px solid var(--line); }
+    .detail-block strong { display: block; margin-bottom: 7px; font-size: 11px; color: var(--teal); letter-spacing: .08em; text-transform: uppercase; }
+    .detail-block p { margin: 0; color: #4d5855; font-size: 12px; line-height: 1.7; }
+    @keyframes rise { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+    .forms { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .form-card { position: relative; padding: 24px; min-height: 240px; border-radius: var(--radius); background: var(--white); border: 1px solid var(--line); }
+    .form-card.recommended { background: var(--teal); color: var(--paper); border-color: var(--teal); transform: translateY(-8px); box-shadow: var(--shadow); }
+    .form-card .form-num { color: var(--rust); font-family: var(--serif); font-size: 26px; }
+    .recommended .form-num { color: #b9dfce; }
+    .form-card h3 { margin: 22px 0 8px; font-size: 16px; }
+    .form-card p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.7; }
+    .recommended p { color: #d8e8e0; }
+    .form-tag { position: absolute; right: 18px; top: 18px; color: var(--teal); font-size: 10px; font-weight: 700; letter-spacing: .08em; }
+    .recommended .form-tag { color: #c5e5d8; }
+    .flow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; align-items: stretch; }
+    .flow-step { min-height: 152px; padding: 17px 14px; background: var(--white); border: 1px solid var(--line); border-radius: 13px; }
+    .flow-step:nth-child(odd) { background: var(--paper-deep); }
+    .flow-step b { color: var(--rust); font-family: var(--serif); font-size: 22px; }
+    .flow-step strong { display: block; margin: 18px 0 6px; font-size: 13px; }
+    .flow-step span { color: var(--muted); font-size: 11px; line-height: 1.55; display: block; }
+    .factors { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .factor { display: grid; grid-template-columns: 34px 1fr; gap: 14px; padding: 20px; border: 1px solid var(--line); border-radius: 13px; background: rgba(251, 250, 246, .55); }
+    .factor-number { width: 28px; height: 28px; display: grid; place-items: center; border-radius: 8px; color: var(--teal); background: var(--teal-soft); font-size: 11px; font-weight: 700; }
+    .factor h3 { margin: 1px 0 5px; font-size: 14px; }
+    .factor p { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.65; }
+    .hypotheses { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .hypothesis { display: grid; grid-template-columns: 44px 1fr auto; gap: 14px; align-items: start; padding: 18px; background: var(--white); border: 1px solid var(--line); border-radius: 13px; }
+    .hypothesis-code { color: var(--rust); font-family: var(--serif); font-size: 20px; }
+    .hypothesis p { margin: 0; font-size: 13px; font-weight: 600; line-height: 1.45; }
+    .hypothesis small { grid-column: 2 / -1; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .threshold { display: grid; grid-template-columns: 1.05fr .95fr; gap: 14px; align-items: stretch; }
+    .threshold-main { padding: 30px; background: var(--ink); color: var(--paper); border-radius: var(--radius); }
+    .threshold-main h3 { margin: 14px 0 12px; font-family: var(--serif); font-size: 28px; line-height: 1.15; }
+    .threshold-main p { color: #d6dfda; font-size: 13px; line-height: 1.7; }
+    .threshold-list { display: grid; gap: 8px; }
+    .threshold-list div { display: flex; gap: 9px; align-items: flex-start; color: #d6dfda; font-size: 12px; }
+    .threshold-list i { color: #b9dfce; font-style: normal; }
+    .next { padding: 24px; background: var(--gold-soft); border-radius: var(--radius); }
+    .next h3 { margin: 0 0 16px; font-size: 15px; }
+    .next ol { margin: 0; padding-left: 20px; color: #5f532e; font-size: 12px; line-height: 2; }
+    footer { padding: 34px 0 58px; color: var(--muted); font-size: 11px; display: flex; justify-content: space-between; gap: 20px; }
+    .progress { position: fixed; top: 0; left: 0; height: 3px; width: 0; background: var(--rust); z-index: 20; transition: width .1s linear; }
+    @media (max-width: 920px) {
+      .app { display: block; }
+      .sidebar { position: sticky; height: auto; top: 0; display: flex; align-items: center; padding: 12px 5vw; border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand { margin: 0 auto 0 0; }
+      .nav-label, .side-note { display: none; }
+      .nav { display: flex; gap: 3px; overflow-x: auto; }
+      .nav a { padding: 8px; white-space: nowrap; font-size: 11px; }
+      .nav-num { display: none; }
+      .topbar { padding: 0 5vw; }
+      .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 56px; }
+      .hero-aside { max-width: 500px; }
+      .flow { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 620px) {
+      .topbar { height: 52px; }
+      .crumb { display: none; }
+      .top-actions { width: 100%; justify-content: space-between; }
+      .wrap { width: min(100% - 36px, 1180px); }
+      .hero { padding: 46px 0 52px; }
+      h1 { font-size: clamp(42px, 13vw, 66px); }
+      .hero-lead { font-size: 16px; }
+      .section { padding: 54px 0; }
+      .section-heading { display: block; }
+      .section-intro { margin-top: 14px; }
+      .signal-grid, .forms, .factors, .hypotheses, .threshold { grid-template-columns: 1fr; }
+      .form-card.recommended { transform: none; }
+      .opportunity-head { display: block; }
+      .filters { margin-top: 14px; }
+      .scenario-toggle { grid-template-columns: 34px 1fr 22px; gap: 10px; padding: 15px 14px; }
+      .scenario-toggle .tier { grid-column: 2; grid-row: 2; width: max-content; }
+      .scenario-detail { padding: 0 14px 18px 58px; }
+      .scenario.open .scenario-detail { grid-template-columns: 1fr; gap: 10px; }
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .flow-step { min-height: 128px; }
+      footer { display: block; }
+      footer span { display: block; margin-top: 8px; }
+    }
+    @media print {
+      body::before, .sidebar, .topbar, .filters, .print-btn, .progress { display: none !important; }
+      .app { display: block; }
+      .wrap { width: 100%; }
+      .hero { padding-top: 24px; }
+      .scenario-detail, .scenario[hidden] { display: block !important; }
+      .scenario { break-inside: avoid; }
+      .section { padding: 34px 0; }
+      .form-card.recommended { transform: none; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <div class="app">
+    <aside class="sidebar" aria-label="页面导航">
+      <div class="brand"><div class="brand-mark">KB</div><div><strong>Field Notes</strong><small>知识库垂直 Agent</small></div></div>
+      <p class="nav-label">研究地图</p>
+      <nav class="nav">
+        <a href="#overview" class="active"><span class="nav-num">01</span>结论总览</a>
+        <a href="#opportunities"><span class="nav-num">02</span>场景机会</a>
+        <a href="#forms"><span class="nav-num">03</span>产品形态</a>
+        <a href="#workflow"><span class="nav-num">04</span>最小闭环</a>
+        <a href="#research"><span class="nav-num">05</span>探索因素</a>
+        <a href="#validation"><span class="nav-num">06</span>验证假设</a>
+        <a href="#decision"><span class="nav-num">07</span>决策门槛</a>
+      </nav>
+      <div class="side-note"><strong>探索稿 v0.1</strong>2026.08.14 · 前期需求研究<br>不是 PRD，也不是技术设计。</div>
+    </aside>
+    <main>
+      <header class="topbar"><div class="crumb"><span>推推 · 云盘工具调研</span><b>/</b> 需求探索可视化</div><div class="top-actions"><span class="status"><i></i>探索阶段</span><button class="print-btn" type="button" id="printBtn">打印 / 导出 PDF</button></div></header>
+      <div class="wrap">
+        <section class="hero" id="overview">
+          <div>
+            <div class="eyebrow">Research map · 需求探索</div>
+            <h1>让云盘里的文件，开始完成工作。</h1>
+            <p class="hero-lead">这不是一个“能回答所有问题”的知识库，而是一套围绕高频、强规则、需要留痕的文件工作流 Agent。云盘提供可信上下文，Agent 把它变成可复核、可执行的工作结果。</p>
+            <div class="hero-meta"><span class="meta-chip">7 个候选场景</span><span class="meta-chip">3 种产品形态</span><span class="meta-chip">10 个验证假设</span><span class="meta-chip">4 周研究周期</span></div>
+          </div>
+          <aside class="hero-aside"><div class="aside-label">首个试点建议</div><h2>财务票据 / 合同合规核验 Agent</h2><p>从受控文件夹取数，按企业规则核验，给出逐条结论与引用，发起人工复核，生成报告并回存云盘。</p></aside>
+        </section>
+
+        <section class="section" id="signals">
+          <div class="section-heading"><div><div class="section-kicker">01 / 先看判断</div><h2 class="section-title">先证明闭环，<br>再证明平台。</h2></div><p class="section-intro">首期不追求覆盖所有知识问答，优先验证一个真实任务是否能完成“读取 → 判断 → 复核 → 回存”。</p></div>
+          <div class="signal-grid">
+            <article class="signal"><div class="signal-mark">01</div><h3>文件是上下文</h3><p>权限、版本、组织关系和历史记录，让 Agent 的结论有边界、有来源。</p></article>
+            <article class="signal"><div class="signal-mark">02</div><h3>队列比聊天更接近工作</h3><p>批量任务、异常分级和人工复核，比一次性问答更能推动事情完成。</p></article>
+            <article class="signal"><div class="signal-mark">03</div><h3>高风险场景不自动拍板</h3><p>财务、法务等场景定位为初审与协作，关键判断必须有引用和人工确认。</p></article>
+          </div>
+        </section>
+
+        <section class="section" id="opportunities">
+          <div class="section-heading"><div><div class="section-kicker">02 / Opportunity map</div><h2 class="section-title">场景机会地图</h2></div><p class="section-intro">优先级是第一轮访谈的抽样顺序，不是市场结论。点击任意场景查看知识源、动作、云盘关系与风险。</p></div>
+          <div class="opportunity-head"><h3>候选垂直场景 <span style="color:var(--muted);font-weight:400;font-size:12px">7 items</span></h3><div class="filters" role="group" aria-label="按优先级筛选"><button class="filter is-selected" data-filter="all" type="button">全部</button><button class="filter" data-filter="A" type="button">A · 首期</button><button class="filter" data-filter="B" type="button">B · 高潜</button><button class="filter" data-filter="C" type="button">C · 底座</button></div></div>
+          <div class="scenario-list">
+            <article class="scenario" data-tier="A"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">A1</span><span><span class="scenario-title">财务票据 / 报销核验 Agent</span><span class="scenario-sub">从批量票据到复核队列</span></span><span class="tier tier-a">A · 首期</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>报销制度、发票、供应商和项目名单。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>抽取字段、规则校验、重复/缺失/异常识别、复核报告。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>受控文件夹、原件引用、结果回存；注意 OCR 质量与税务边界。</p></div></div></article>
+            <article class="scenario" data-tier="A"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">A2</span><span><span class="scenario-title">合同审阅与版本风险 Agent</span><span class="scenario-sub">从条款比对到谈判问题</span></span><span class="tier tier-a">A · 首期</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>合同模板、条款库、授权矩阵和历史谈判版本。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>识别类型、按清单审阅、比较版本、标注风险、生成问题。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>版本链、共享权限、批注关联；不可把建议表述成法律结论。</p></div></div></article>
+            <article class="scenario" data-tier="B"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">B1</span><span><span class="scenario-title">投标 / 售前材料组装 Agent</span><span class="scenario-sub">从资料库到客户材料包</span></span><span class="tier tier-b">B · 高潜</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>产品资料、案例、资质、历史标书和客户行业信息。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>按客户场景组装材料包，标记旧版本与缺件。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>按项目文件夹取材并归档；需防止引用过期版本。</p></div></div></article>
+            <article class="scenario" data-tier="B"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">B2</span><span><span class="scenario-title">项目交付 / 验收 Agent</span><span class="scenario-sub">从交付文件到缺件清单</span></span><span class="tier tier-b">B · 高潜</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>交付清单、验收标准、会议纪要和里程碑资料。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>检查缺件、里程碑状态和验收风险，发起补件任务。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>文件夹状态、任务通知、审计记录；需要跨角色协作。</p></div></div></article>
+            <article class="scenario" data-tier="B"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">B3</span><span><span class="scenario-title">HR 制度与入职 Agent</span><span class="scenario-sub">从有效制度到个性化清单</span></span><span class="tier tier-b">B · 高潜</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>制度、地区规则、岗位和员工资料。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>按身份和生效日期回答制度，生成入职清单。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>敏感资料隔离、版本生效管理；需明确适用范围。</p></div></div></article>
+            <article class="scenario" data-tier="B"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">B4</span><span><span class="scenario-title">教学 / 培训备课 Agent</span><span class="scenario-sub">从课程库到版本化课程包</span></span><span class="tier tier-b">B · 高潜</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>课件、题库、教案和学情资料。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>生成教案、练习、复盘和可复用课程包。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>课程库、模板复用、结果回存；需区分生效教材版本。</p></div></div></article>
+            <article class="scenario" data-tier="C"><button class="scenario-toggle" type="button" aria-expanded="false"><span class="scenario-code">C1</span><span><span class="scenario-title">文件夹经营摘要 Agent</span><span class="scenario-sub">从周期文件到决策问题</span></span><span class="tier tier-c">C · 底座</span><span class="chevron">+</span></button><div class="scenario-detail"><div class="detail-block"><strong>知识源</strong><p>报告、台账、项目材料和周期性文档。</p></div><div class="detail-block"><strong>Agent 结果</strong><p>生成带引用的摘要、异常趋势和待决策问题。</p></div><div class="detail-block"><strong>云盘关系 / 风险</strong><p>按范围定时运行并回存；单独付费差异化较弱。</p></div></div></article>
+          </div>
+        </section>
+
+        <section class="section" id="forms">
+          <div class="section-heading"><div><div class="section-kicker">03 / Product form</div><h2 class="section-title">云盘入口，<br>专业工作台。</h2></div><p class="section-intro">推荐组合不是二选一：云盘负责发现、授权和回存；独立工作台负责批量任务、规则配置、复核和审计。</p></div>
+          <div class="forms"><article class="form-card"><span class="form-num">01</span><span class="form-tag">入口</span><h3>云盘内置 Agent</h3><p>在文件夹或文件详情页直接使用。上手快，权限和回存天然闭环；适合作为主入口。</p></article><article class="form-card recommended"><span class="form-num">02</span><span class="form-tag">推荐组合</span><h3>独立垂直工作台</h3><p>承载队列、规则、批处理、复核和审计。专业能力足够强时，可形成独立产品形态。</p></article><article class="form-card"><span class="form-num">03</span><span class="form-tag">二期</span><h3>连接器 / API</h3><p>接入财务、法务、OA、ERP。进入核心流程，客单价高，但集成成本和销售周期也更高。</p></article></div>
+        </section>
+
+        <section class="section" id="workflow">
+          <div class="section-heading"><div><div class="section-kicker">04 / Minimum loop</div><h2 class="section-title">一个任务，<br>六个可观察节点。</h2></div><p class="section-intro">每一步都应该有输入、输出、失败状态和人工边界。可观察性比“模型看起来很聪明”更重要。</p></div>
+          <div class="flow"><div class="flow-step"><b>01</b><strong>选定范围</strong><span>选择受控文件夹，确认权限。</span></div><div class="flow-step"><b>02</b><strong>绑定知识</strong><span>制度、模板、名单；显示生效日期。</span></div><div class="flow-step"><b>03</b><strong>批量分析</strong><span>处理中、失败、待复核状态可见。</span></div><div class="flow-step"><b>04</b><strong>证据化结果</strong><span>结论、引用、依据、置信度、缺失项。</span></div><div class="flow-step"><b>05</b><strong>人工复核</strong><span>确认、驳回、补件或转交负责人。</span></div><div class="flow-step"><b>06</b><strong>回存归档</strong><span>报告和批注回存，原件不覆盖。</span></div></div>
+        </section>
+
+        <section class="section" id="research">
+          <div class="section-heading"><div><div class="section-kicker">05 / Research lens</div><h2 class="section-title">需求探索的<br>七个镜头。</h2></div><p class="section-intro">每个候选场景都必须回答这些问题，避免被“模型能力展示”带偏。</p></div>
+          <div class="factors"><article class="factor"><span class="factor-number">01</span><div><h3>用户与触发</h3><p>谁使用、谁复核、谁维护规则、谁购买？任务由什么事件触发？</p></div></article><article class="factor"><span class="factor-number">02</span><div><h3>现状与痛点</h3><p>当前如何找文件、判断、协作、审批、归档？最耗时和最难追责的步骤是什么？</p></div></article><article class="factor"><span class="factor-number">03</span><div><h3>知识边界</h3><p>哪些文件夹、类型、版本和生效日期是有效依据？冲突或无权限时如何停止？</p></div></article><article class="factor"><span class="factor-number">04</span><div><h3>Agent 行为</h3><p>只回答，还是要批量读取、分类、判断、生成、通知和回存？每个动作如何撤销？</p></div></article><article class="factor"><span class="factor-number">05</span><div><h3>云盘合作价值</h3><p>云盘是入口、知识底座、执行空间、结果归档，还是权限与审计基础？</p></div></article><article class="factor"><span class="factor-number">06</span><div><h3>价值与证据</h3><p>价值是节省时间、减少错误、提升合规、缩短交付，还是减少专家答疑？怎么测量？</p></div></article><article class="factor"><span class="factor-number">07</span><div><h3>风险与边界</h3><p>如何处理越权、错引、版本错用、敏感数据外泄和高风险结论的人工兜底？</p></div></article><article class="factor"><span class="factor-number">08</span><div><h3>独立形态增量</h3><p>如果脱离云盘成为独立产品，新增的队列、规则、复核和审计能力是否值得付费？</p></div></article></div>
+        </section>
+
+        <section class="section" id="validation">
+          <div class="section-heading"><div><div class="section-kicker">06 / Evidence</div><h2 class="section-title">先验证信任，<br>再验证效率。</h2></div><p class="section-intro">4 周内用访谈、脱敏文件包和概念测试，把“感觉有价值”变成可判断的证据。</p></div>
+          <div class="hypotheses"><article class="hypothesis"><span class="hypothesis-code">H1</span><p>受控文件夹比单次上传更贴近真实任务</p><small>验证：文件包走查 + 概念测试。通过：8/10 目标用户能独立发起任务。</small></article><article class="hypothesis"><span class="hypothesis-code">H2</span><p>证据引用比更流畅的聊天更能建立信任</p><small>验证：两版原型对比。通过：带引用版本复核采纳率更高。</small></article><article class="hypothesis"><span class="hypothesis-code">H3</span><p>异常队列比聊天窗口更能推动完成</p><small>验证：任务流测试。通过：完成一个批次的时间更短。</small></article><article class="hypothesis"><span class="hypothesis-code">H4</span><p>规则负责人愿意维护知识源</p><small>验证：配置任务观察。通过：30 分钟内完成首个规则集。</small></article><article class="hypothesis"><span class="hypothesis-code">H5</span><p>云盘权限是购买理由，而非技术细节</p><small>验证：管理员与销售访谈。通过：至少 3 个客户主动提及权限或审计。</small></article><article class="hypothesis"><span class="hypothesis-code">H6</span><p>高风险结论的错误边界可接受</p><small>验证：双人复核 + 误报漏报记录。通过：高风险结论零无引用输出。</small></article><article class="hypothesis"><span class="hypothesis-code">H7</span><p>结果回存能形成闭环</p><small>验证：试点任务追踪。通过：超过半数任务完成回存或归档。</small></article><article class="hypothesis"><span class="hypothesis-code">H8</span><p>专业工作台值得独立存在</p><small>验证：观察高频批处理。通过：每周至少 2 次批量任务。</small></article><article class="hypothesis"><span class="hypothesis-code">H9</span><p>用户愿意为节省的复核时间付费</p><small>验证：价值访谈 / 概念报价。通过：找到预算来源和采购人。</small></article><article class="hypothesis"><span class="hypothesis-code">H10</span><p>场景可从单部门复制到相邻部门</p><small>验证：多部门试点。通过：规则复用率和扩展意愿达到预设目标。</small></article></div>
+        </section>
+
+        <section class="section" id="decision">
+          <div class="section-heading"><div><div class="section-kicker">07 / Decision gate</div><h2 class="section-title">什么时候，<br>才进入 MVP？</h2></div><p class="section-intro">如果只证明了“回答看起来不错”，不进入 MVP。</p></div>
+          <div class="threshold"><div class="threshold-main"><div class="aside-label">继续的最低证据</div><h3>一个高频任务，能在授权范围内闭环。</h3><p>不是模型回答得多漂亮，而是一个真实组织愿意提供样本、复核人和预算，并且结果能被测量、被回存、被追责。</p><div class="threshold-list"><div><i>✓</i><span>有明确高频任务，而非泛泛“想用 AI”。</span></div><div><i>✓</i><span>文件、规则和结果都能在授权范围内闭环。</span></div><div><i>✓</i><span>至少一个组织愿意提供脱敏样本和复核人。</span></div><div><i>✓</i><span>高风险结论有人工确认和审计路径。</span></div><div><i>✓</i><span>价值可用时长、错误、复核轮次或回存率衡量。</span></div><div><i>✓</i><span>独立产品形态有清晰的能力增量。</span></div></div></div><div class="next"><h3>下一步 4 件事</h3><ol><li>在票据核验和合同审阅中选 1 个首试点。</li><li>找到 1 个愿意提供脱敏样本的组织。</li><li>只测试受控文件夹、引用、异常队列、人工确认、回存。</li><li>用复核时间、采纳率、回存率做继续 / 调整 / 停止决策。</li></ol></div></div>
+        </section>
+
+        <footer><span>知识库垂直 Agent × 云盘 · 需求探索可视化</span><span>基于《知识库垂直Agent需求探索-研究框架.md》整理 · 2026.08.14</span></footer>
+      </div>
+    </main>
+  </div>
+  <script>
+    const filters = document.querySelectorAll('.filter');
+    const scenarios = document.querySelectorAll('.scenario');
+    filters.forEach((filter) => filter.addEventListener('click', () => {
+      filters.forEach((item) => item.classList.remove('is-selected'));
+      filter.classList.add('is-selected');
+      const value = filter.dataset.filter;
+      scenarios.forEach((scenario) => { scenario.hidden = value !== 'all' && scenario.dataset.tier !== value; });
+    }));
+    document.querySelectorAll('.scenario-toggle').forEach((toggle) => toggle.addEventListener('click', () => {
+      const card = toggle.closest('.scenario');
+      const open = card.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    }));
+    document.getElementById('printBtn').addEventListener('click', () => window.print());
+    const progress = document.getElementById('progress');
+    const updateProgress = () => { const max = document.documentElement.scrollHeight - window.innerHeight; progress.style.width = `${max > 0 ? (window.scrollY / max) * 100 : 0}%`; };
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+    const links = [...document.querySelectorAll('.nav a')];
+    const sections = links.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => { if (entry.isIntersecting) { links.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${entry.target.id}`)); } }), { rootMargin: '-24% 0px -62% 0px' });
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
