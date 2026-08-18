@@ -742,9 +742,9 @@
     .source-header h2 { margin: 4px 0 0; }
     .source-header p { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
     .source-badge { flex: 0 0 auto; padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); color: var(--brand-dark); font-size: 11px; font-weight: 700; }
-    .source-frame-wrap { overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; box-shadow: 0 8px 24px rgba(20, 32, 25, .06); }
-    .source-frame { display: block; width: 100%; min-height: 80vh; border: 0; background: #fff; }
-    .source-open { display: inline-flex; align-items: center; margin-top: 9px; color: var(--brand-dark); font-size: 11px; }
+    .research-content { min-height: 180px; }
+    .research-loading { padding: 28px 0; color: var(--muted); font-size: 12px; }
+    .research-error { padding: 18px; border: 1px solid var(--danger-soft); border-radius: var(--radius); background: var(--danger-soft); color: var(--danger); font-size: 12px; }
     /* 保留旧摘要代码以便追溯，但页面只展示两份完整原稿。 */
     #knowledge-map, #industry-opportunity, #industry-breakdown,
     #tasks, #capability, #moat, #commercial, #cloud, #overseas, #validation,
@@ -761,7 +761,7 @@
     @media (max-width: 620px) {
       .source-header { display: block; }
       .source-badge { display: inline-block; margin-top: 10px; }
-      .source-frame { min-height: 75vh; }
+      .research-content { min-height: 140px; }
     }
   </style>
 </head>
@@ -800,12 +800,10 @@
         <section class="section research-source" id="user-scenarios">
           <div class="section-head source-header">
             <div><h2>01-用户场景需求研究</h2><p>从高知识 / 文件依赖工作出发，梳理人工信息处理最重的岗位、任务与 Agent 机会场景。</p></div>
-            <span class="source-badge">完整原稿</span>
           </div>
-          <div class="source-frame-wrap">
-            <iframe class="source-frame" title="用户场景需求研究" src="行业需求横扫.html" loading="eager"></iframe>
+          <div class="research-content" id="research-content" data-source="行业需求横扫.html">
+            <div class="research-loading">正在加载用户场景需求研究…</div>
           </div>
-          <a class="source-open" href="行业需求横扫.html" target="_blank" rel="noreferrer">在新窗口打开原始研究页面 ↗</a>
         </section>
 
 <section class="section" id="benchmarks">
@@ -1259,20 +1257,62 @@
     backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
     updateScroll();
 
-    // 两份本地原稿同源时自动展开；若浏览器限制 file:// 访问，则保留可滚动的兜底高度。
-    document.querySelectorAll('.source-frame').forEach((frame) => {
-      const resizeFrame = () => {
-        try {
-          const doc = frame.contentDocument;
-          const height = Math.max(doc.documentElement.scrollHeight, doc.body?.scrollHeight || 0);
-          if (height > 0) frame.style.height = height + 'px';
-        } catch (error) {
-          frame.style.height = '80vh';
-        }
-      };
-      frame.addEventListener('load', resizeFrame);
-      window.addEventListener('resize', resizeFrame, { passive: true });
-    });
+    // 原稿以内联方式加载，避免 iframe 容器造成视觉断层，同时保留原稿的结构和锚点。
+    async function loadResearchSource() {
+      const host = document.getElementById('research-content');
+      if (!host) return;
+      try {
+        const response = await fetch(host.dataset.source);
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        const html = await response.text();
+        const source = new DOMParser().parseFromString(html, 'text/html');
+        const shadow = host.attachShadow({ mode: 'open' });
+        const style = document.createElement('style');
+        style.textContent = source.querySelector('style')?.textContent || '';
+        const theme = document.createElement('style');
+        theme.textContent = `
+          :host { --bg: #f6f7f5; --panel: #ffffff; --panel2: #f1f3f1; --text: #222322; --muted: #777a74; --line: rgba(31,35,32,.12); --blue: #2f6bdb; --cyan: #187a5a; --violet: #2f6bdb; --amber: #a96510; --red: #c13f3f; --green: #187a5a; display:block; }
+          body { margin:0!important; min-height:0!important; background:var(--bg)!important; color:var(--text)!important; font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif!important; }
+          .nav { display:none!important; }
+          .wrap { width:100%!important; max-width:none!important; margin:0!important; padding:0 0 18px!important; }
+          h1,h2,h3,h4 { color:var(--text)!important; letter-spacing:0!important; }
+          p,.section-desc,.lead,.job p,.muted,.rank span,.summary-band span,.step span,footer { color:var(--muted)!important; }
+          .eyebrow,.tag,.scene-id,.kicker,.focus-label { color:var(--blue)!important; }
+          .card,.job,.rank,.table-wrap,.summary-band>div,.step,.conclusion,.group,.focus-insight,.scene-card,.scene-note,.agent-map-card,.agent-side-card,.agent-priority,.method { background:var(--panel)!important; border-color:var(--line)!important; box-shadow:none!important; border-radius:8px!important; }
+          .card,.job,.rank,.group,.step,.scene-card,.agent-side-card,.agent-map-card { color:var(--text)!important; }
+          .pill,.file-pill,.pain,.flow span,.focus-flow span,.scene-badge,.source-chip { border-radius:5px!important; background:var(--panel2)!important; border-color:var(--line)!important; color:var(--text)!important; }
+          .summary-band,.process,.group-grid,.jobs-grid,.top10,.scene-grid,.agent-map-layout { gap:10px!important; }
+          th { background:var(--panel2)!important; color:var(--text)!important; }
+          td { color:var(--text)!important; border-color:var(--line)!important; }
+          .key-quote,.focus-main,.scene-desc,.output-box span { color:var(--text)!important; }
+          .stat b,.scene-count strong,.big { color:var(--blue)!important; }
+          .source-open { color:var(--blue)!important; }
+        `;
+        const body = document.createElement('body');
+        const wrap = source.querySelector('.wrap');
+        if (!wrap) throw new Error('原稿缺少 .wrap 容器');
+        body.append(wrap.cloneNode(true));
+        shadow.append(style, theme, body);
+
+        const labels = [
+          ['PART 01', '01.1 依赖知识 / 文件的工作'],
+          ['PART 02', '01.2 人工信息处理密集型工作'],
+          ['FOCUS', '01.3 人工处理重点工作'],
+          ['SYNTHESIS', '01.4 知识依赖与人工处理二维聚焦'],
+          ['PART 03 · OPPORTUNITY CARDS', '01.5 重点场景机会卡'],
+          ['PART 04 · AGENT OPPORTUNITY MAP', '01.6 Agent 场景机会地图']
+        ];
+        shadow.querySelectorAll('.eyebrow').forEach((node) => {
+          const match = labels.find(([from]) => node.textContent.trim() === from);
+          if (match) node.textContent = match[1];
+        });
+        host.classList.add('is-loaded');
+      } catch (error) {
+        host.innerHTML = '<div class="research-error">用户场景需求研究加载失败，请直接打开同目录下的“行业需求横扫.html”。</div>';
+        console.error('Unable to load research source:', error);
+      }
+    }
+    loadResearchSource();
 
     let pretextLayout = null;
     const prepared = new Map();
