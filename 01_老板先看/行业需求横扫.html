@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>高度依赖已有知识/文件的工作与人工信息处理现状</title>
+<style>
+  :root{
+    --bg:#0b1020;
+    --panel:#11182b;
+    --panel2:#151e34;
+    --text:#f4f7ff;
+    --muted:#9ba8c7;
+    --line:rgba(255,255,255,.09);
+    --blue:#6ea8ff;
+    --cyan:#63e6d6;
+    --violet:#a88bff;
+    --amber:#ffc66d;
+    --red:#ff7d91;
+    --green:#7ee2a8;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(circle at 15% 0%, rgba(72,117,255,.18), transparent 28%),
+      radial-gradient(circle at 85% 10%, rgba(125,94,255,.14), transparent 24%),
+      var(--bg);
+    line-height:1.55;
+  }
+  .wrap{width:min(1240px, calc(100% - 48px)); margin:0 auto; padding:64px 0 96px}
+  .eyebrow{font-size:13px; letter-spacing:.16em; color:var(--cyan); font-weight:700; text-transform:uppercase}
+  h1{font-size:clamp(40px,5vw,68px); line-height:1.08; margin:16px 0 18px; letter-spacing:-.04em; max-width:1050px}
+  .lead{font-size:20px; color:#c8d2ea; max-width:900px; margin:0 0 36px}
+  .hero-grid{display:grid;grid-template-columns:1.5fr .9fr;gap:20px;align-items:stretch}
+  .card{background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 18px 60px rgba(0,0,0,.18)}
+  .key-quote{font-size:28px;line-height:1.35;font-weight:700;letter-spacing:-.02em}
+  .key-quote span{color:var(--cyan)}
+  .stat-stack{display:grid;gap:14px}
+  .stat{background:rgba(255,255,255,.035);border:1px solid var(--line);border-radius:16px;padding:18px 20px}
+  .stat b{display:block;font-size:28px;margin-bottom:2px}
+  .stat small{color:var(--muted);font-size:13px}
+  section{margin-top:72px}
+  .section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:22px}
+  h2{font-size:34px;line-height:1.2;margin:0;letter-spacing:-.025em}
+  .section-desc{color:var(--muted);max-width:650px;font-size:15px}
+  .jobs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .job{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.028);min-height:178px}
+  .job .tag{display:inline-flex;align-items:center;gap:8px;font-size:12px;color:#dce6ff;background:rgba(110,168,255,.12);border:1px solid rgba(110,168,255,.22);padding:5px 9px;border-radius:999px;margin-bottom:14px}
+  .job h3{font-size:18px;margin:0 0 8px}
+  .job p{color:var(--muted);font-size:14px;margin:0}
+  .summary-band{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:18px}
+  .summary-band div{padding:18px 16px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.025)}
+  .summary-band b{display:block;font-size:14px;margin-bottom:6px}
+  .summary-band span{font-size:12px;color:var(--muted)}
+  .matrix{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  .matrix .card h3{font-size:21px;margin:0 0 14px}
+  .matrix ul{padding:0;margin:0;list-style:none;display:grid;gap:10px}
+  .matrix li{display:flex;gap:10px;color:#dbe5fb;font-size:14px}
+  .matrix li:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--cyan);margin-top:7px;flex:0 0 auto}
+  .table-wrap{overflow:auto;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.02)}
+  table{width:100%;border-collapse:collapse;min-width:980px}
+  th,td{padding:15px 16px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  th{font-size:12px;color:#b7c3df;text-transform:uppercase;letter-spacing:.08em;background:rgba(255,255,255,.035)}
+  td{font-size:14px;color:#dce5f8}
+  td.muted{color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .level{display:inline-flex;align-items:center;gap:7px;font-weight:700;white-space:nowrap}
+  .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+  .extreme .dot{background:var(--red)}
+  .high .dot{background:var(--amber)}
+  .midhigh .dot{background:var(--blue)}
+  .top10{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .rank{position:relative;padding:20px 18px 18px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid var(--line)}
+  .rank .n{font-size:11px;color:var(--cyan);font-weight:800;letter-spacing:.12em;margin-bottom:12px}
+  .rank b{font-size:16px;display:block;margin-bottom:8px}
+  .rank span{font-size:12px;color:var(--muted)}
+  .process{display:grid;grid-template-columns:repeat(8,1fr);gap:10px;margin-top:18px}
+  .step{padding:16px 10px;text-align:center;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025)}
+  .step b{display:block;font-size:22px;margin-bottom:4px;color:var(--cyan)}
+  .step span{font-size:12px;color:var(--muted)}
+  .conclusion{margin-top:72px;padding:34px;border-radius:24px;background:linear-gradient(135deg,rgba(80,116,255,.16),rgba(99,230,214,.08));border:1px solid rgba(126,173,255,.18)}
+  .conclusion h2{margin-bottom:16px}
+  .conclusion p{font-size:22px;line-height:1.55;margin:0;color:#eef4ff;max-width:1000px}
+  .conclusion strong{color:var(--cyan)}
+  footer{margin-top:34px;color:#73809f;font-size:12px}
+
+  .nav{position:fixed;left:20px;top:50%;transform:translateY(-50%);z-index:20;display:grid;gap:10px}
+  .nav a{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.18);display:block;border:1px solid rgba(255,255,255,.15);transition:.2s}
+  .nav a:hover{background:var(--cyan);transform:scale(1.25)}
+  .kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(99,230,214,.2);background:rgba(99,230,214,.06);color:#baf5eb;font-size:12px;font-weight:700;margin-bottom:14px}
+  .insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+  .insight{padding:20px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.025)}
+  .insight .num{font-size:32px;font-weight:800;letter-spacing:-.03em;color:var(--cyan)}
+  .insight b{display:block;font-size:15px;margin:4px 0 6px}
+  .insight span{font-size:12px;color:var(--muted)}
+  .quadrant{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:12px;min-height:520px;margin-top:22px}
+  .quad{position:relative;padding:24px;border-radius:20px;border:1px solid var(--line);background:rgba(255,255,255,.025);overflow:hidden}
+  .quad.hot{background:linear-gradient(135deg,rgba(255,125,145,.12),rgba(168,139,255,.08));border-color:rgba(255,125,145,.25)}
+  .quad .qtitle{font-weight:800;font-size:18px;margin-bottom:6px}
+  .quad .qdesc{font-size:12px;color:var(--muted);margin-bottom:18px}
+  .pills{display:flex;flex-wrap:wrap;gap:8px}
+  .pill{font-size:12px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.055);border:1px solid var(--line);color:#dce5f8}
+  .axis-note{display:flex;justify-content:space-between;color:#8f9ab5;font-size:11px;margin-top:8px}
+  .callout{margin-top:18px;padding:18px 20px;border-left:3px solid var(--cyan);background:rgba(99,230,214,.05);border-radius:0 14px 14px 0;color:#dce9fb;font-size:14px}
+  .group-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px}
+  .group{padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}
+  .group b{font-size:14px;display:block;margin-bottom:6px}
+  .group span{font-size:12px;color:var(--muted)}
+  .method{margin-top:24px;padding:18px 20px;border:1px dashed rgba(255,255,255,.15);border-radius:16px;color:#9ba8c7;font-size:12px}
+  .method strong{color:#dbe5f8}
+
+
+  /* Focus conclusion-first section */
+  .focus-insight{
+    display:grid;
+    grid-template-columns:180px 1fr;
+    gap:24px;
+    align-items:center;
+    margin:20px 0 24px;
+    padding:24px 28px;
+    border-radius:22px;
+    background:linear-gradient(135deg,rgba(80,116,255,.16),rgba(99,230,214,.07));
+    border:1px solid rgba(126,173,255,.2);
+    overflow:hidden;
+    position:relative;
+  }
+  .focus-insight:after{
+    content:"";
+    position:absolute;
+    width:280px;height:280px;border-radius:50%;
+    right:-110px;top:-150px;
+    background:radial-gradient(circle,rgba(99,230,214,.10),transparent 68%);
+    pointer-events:none;
+  }
+  .focus-label{font-size:12px;letter-spacing:.14em;color:var(--cyan);font-weight:800;text-transform:uppercase}
+  .focus-label strong{display:block;color:#f5f7ff;font-size:24px;letter-spacing:-.02em;margin-top:6px}
+  .focus-copy{position:relative;z-index:1}
+  .focus-main{font-size:22px;line-height:1.45;font-weight:700;letter-spacing:-.015em;color:#f2f6ff;margin-bottom:13px}
+  .focus-flow{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:11px}
+  .focus-flow span{font-size:13px;font-weight:700;color:#cbd8f3;padding:6px 9px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.035);border-radius:9px}
+  .focus-flow span.em{color:var(--cyan);border-color:rgba(99,230,214,.18);background:rgba(99,230,214,.06)}
+  .focus-flow i{font-style:normal;color:#62708f;font-size:12px}
+  .focus-formula{font-size:13px;color:#9eabc7}
+  .focus-formula strong{color:#dce7fb;font-weight:700}
+  #focus .top10{margin-top:0}
+  #focus .rank{min-height:158px}
+
+  /* Opportunity cards */
+  .scene-intro{display:grid;grid-template-columns:1.2fr .8fr;gap:18px;margin-bottom:20px}
+  .scene-intro .card{padding:24px}
+  .scene-intro h3{font-size:24px;margin:0 0 8px}
+  .scene-intro p{margin:0;color:var(--muted);font-size:14px}
+  .scene-count{display:flex;align-items:center;justify-content:space-between;gap:16px}
+  .scene-count strong{font-size:42px;letter-spacing:-.04em;color:var(--cyan)}
+  .scene-count span{font-size:13px;color:var(--muted);max-width:210px}
+  .scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+  .scene-card{position:relative;padding:24px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));overflow:hidden}
+  .scene-card:before{content:"";position:absolute;left:0;top:0;width:100%;height:2px;background:linear-gradient(90deg,rgba(99,230,214,.75),rgba(168,139,255,.45),transparent)}
+  .scene-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+  .scene-id{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--cyan);margin-bottom:7px}
+  .scene-card h3{font-size:22px;letter-spacing:-.02em;margin:0 0 5px}
+  .scene-role{font-size:12px;color:#aebbd6}
+  .scene-badge{flex:0 0 auto;font-size:11px;padding:6px 9px;border-radius:999px;background:rgba(168,139,255,.10);border:1px solid rgba(168,139,255,.22);color:#d9cdff}
+  .scene-desc{font-size:14px;color:#dbe5f8;line-height:1.65;margin:0 0 16px}
+  .scene-label{font-size:11px;color:#8290ae;letter-spacing:.08em;text-transform:uppercase;margin:14px 0 8px}
+  .file-pills,.metric-pills{display:flex;flex-wrap:wrap;gap:7px}
+  .file-pill{font-size:11px;padding:5px 8px;border-radius:8px;background:rgba(110,168,255,.07);border:1px solid rgba(110,168,255,.13);color:#bcd1f4}
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;color:#dce6ff;font-size:12px;line-height:1.8}
+  .flow span{padding:4px 7px;border-radius:7px;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.06)}
+  .flow i{font-style:normal;color:#657392}
+  .pain-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:2px}
+  .pain{font-size:11px;color:#c9d4eb;padding:8px 9px;border-radius:9px;background:rgba(255,125,145,.045);border:1px solid rgba(255,125,145,.09)}
+  .scene-bottom{display:grid;grid-template-columns:1fr 1.25fr;gap:12px;margin-top:16px;padding-top:15px;border-top:1px solid var(--line)}
+  .output-box b,.metrics b{display:block;font-size:11px;color:#8290ae;margin-bottom:6px;letter-spacing:.06em}
+  .output-box span{font-size:12px;color:#eef4ff}
+  .metric{font-size:11px;color:#dbe5f8;display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}
+  .stars{letter-spacing:1px;color:var(--amber);white-space:nowrap}
+  .scene-note{margin-top:20px;padding:18px 20px;border-radius:16px;background:rgba(168,139,255,.06);border:1px solid rgba(168,139,255,.14);font-size:13px;color:#cbd5eb}
+
+
+  /* Agent opportunity map */
+  .agent-map-layout{display:grid;grid-template-columns:minmax(0,1.72fr) minmax(280px,.72fr);gap:20px;align-items:stretch;margin-top:22px}
+  .agent-map-card{position:relative;padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.018));overflow:hidden;min-height:650px}
+  .agent-map-card:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 18%,rgba(99,230,214,.08),transparent 28%),radial-gradient(circle at 22% 20%,rgba(168,139,255,.08),transparent 26%);pointer-events:none}
+  .agent-chart{position:relative;height:540px;margin:34px 26px 28px 50px;border-left:1px solid rgba(255,255,255,.18);border-bottom:1px solid rgba(255,255,255,.18)}
+  .agent-chart:before,.agent-chart:after{content:"";position:absolute;pointer-events:none}
+  .agent-chart:before{left:0;right:0;top:50%;border-top:1px dashed rgba(255,255,255,.08)}
+  .agent-chart:after{top:0;bottom:0;left:50%;border-left:1px dashed rgba(255,255,255,.08)}
+  .agent-zone{position:absolute;border-radius:18px;border:1px solid rgba(255,255,255,.055);padding:12px 14px;font-size:11px;line-height:1.45;color:#8f9bb8;pointer-events:none}
+  .zone-a{left:51%;top:2%;right:2%;height:47%;background:linear-gradient(135deg,rgba(99,230,214,.075),rgba(110,168,255,.035));border-color:rgba(99,230,214,.11)}
+  .zone-b{left:2%;top:2%;width:47%;height:47%;background:linear-gradient(135deg,rgba(168,139,255,.07),rgba(168,139,255,.025));border-color:rgba(168,139,255,.10)}
+  .zone-c{left:51%;top:51%;right:2%;bottom:2%;background:linear-gradient(135deg,rgba(110,168,255,.05),rgba(255,198,109,.025));border-color:rgba(110,168,255,.08)}
+  .zone-name{display:block;font-size:12px;font-weight:800;color:#dfe8fb;margin-bottom:3px}
+  .zone-a .zone-name{color:var(--cyan)}
+  .zone-b .zone-name{color:#cdbfff}
+  .zone-c .zone-name{color:#a9c9ff}
+  .axis-y{position:absolute;left:-45px;top:50%;transform:translate(-50%,-50%) rotate(-90deg);font-size:12px;color:#8e9ab8;white-space:nowrap;letter-spacing:.02em}
+  .axis-x{position:absolute;left:50%;bottom:-34px;transform:translateX(-50%);font-size:12px;color:#8e9ab8;white-space:nowrap;letter-spacing:.02em}
+  .axis-high-y{position:absolute;left:-8px;top:-24px;color:#6f7d9b;font-size:10px}
+  .axis-low-y{position:absolute;left:-8px;bottom:-22px;color:#6f7d9b;font-size:10px}
+  .axis-low-x{position:absolute;left:0;bottom:-25px;color:#6f7d9b;font-size:10px}
+  .axis-high-x{position:absolute;right:0;bottom:-25px;color:#6f7d9b;font-size:10px}
+  .bubble{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;text-align:center;border-radius:999px;padding:0 10px;font-size:11px;font-weight:800;line-height:1.15;letter-spacing:-.01em;color:#eef5ff;box-shadow:0 10px 26px rgba(0,0,0,.22);z-index:3;cursor:default}
+  .bubble.a{background:linear-gradient(135deg,rgba(99,230,214,.88),rgba(76,157,221,.76));border:1px solid rgba(162,255,242,.58);color:#071821}
+  .bubble.b{background:linear-gradient(135deg,rgba(168,139,255,.82),rgba(113,98,210,.74));border:1px solid rgba(211,197,255,.42)}
+  .bubble.c{background:linear-gradient(135deg,rgba(110,168,255,.78),rgba(72,111,179,.72));border:1px solid rgba(177,209,255,.40)}
+  .bubble.s{width:78px;height:78px}.bubble.m{width:92px;height:92px}.bubble.l{width:108px;height:108px}
+  .bubble small{display:block;font-size:9px;font-weight:600;opacity:.72;margin-top:3px}
+  .agent-side{display:grid;gap:14px}
+  .agent-side-card{padding:22px;border:1px solid var(--line);border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.018))}
+  .agent-side-card.primary{background:linear-gradient(135deg,rgba(99,230,214,.09),rgba(110,168,255,.045));border-color:rgba(99,230,214,.16)}
+  .agent-side-card .num{font-size:11px;letter-spacing:.15em;color:var(--cyan);font-weight:800;margin-bottom:8px}
+  .agent-side-card h3{font-size:18px;margin:0 0 8px;letter-spacing:-.02em}
+  .agent-side-card p{font-size:12px;color:var(--muted);margin:0;line-height:1.65}
+  .agent-tier{display:flex;gap:10px;align-items:flex-start;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+  .agent-dot{width:9px;height:9px;border-radius:50%;margin-top:5px;flex:0 0 auto}
+  .agent-dot.a{background:var(--cyan)}.agent-dot.b{background:var(--violet)}.agent-dot.c{background:var(--blue)}
+  .agent-tier strong{display:block;font-size:12px;color:#e7edfb;margin-bottom:3px}.agent-tier span{font-size:11px;color:#8f9ab5;line-height:1.45}
+  .agent-priority{margin-top:20px;padding:22px 24px;border-radius:20px;background:linear-gradient(135deg,rgba(99,230,214,.10),rgba(168,139,255,.05));border:1px solid rgba(99,230,214,.13);display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center}
+  .agent-priority .big{font-size:20px;font-weight:800;line-height:1.45;letter-spacing:-.02em}.agent-priority .big em{font-style:normal;color:var(--cyan)}
+  .agent-priority .small{font-size:12px;color:var(--muted);margin-top:7px}
+  .priority-tags{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;max-width:360px}.priority-tags span{font-size:11px;padding:6px 9px;border-radius:999px;background:rgba(99,230,214,.07);border:1px solid rgba(99,230,214,.13);color:#baf5ec}
+  .agent-footnote{margin-top:14px;font-size:11px;color:#7885a2}
+
+  @media (max-width:980px){
+    .hero-grid,.matrix{grid-template-columns:1fr}
+    .insight-grid{grid-template-columns:1fr}
+    .group-grid{grid-template-columns:repeat(2,1fr)}
+    .scene-intro,.scene-grid{grid-template-columns:1fr}
+    .agent-map-layout{grid-template-columns:1fr}
+    .agent-priority{grid-template-columns:1fr}
+    .priority-tags{justify-content:flex-start;max-width:none}
+    .focus-insight{grid-template-columns:1fr;gap:10px}
+    .nav{display:none}
+    .jobs-grid{grid-template-columns:repeat(2,1fr)}
+    .summary-band{grid-template-columns:repeat(2,1fr)}
+    .top10{grid-template-columns:repeat(2,1fr)}
+    .process{grid-template-columns:repeat(4,1fr)}
+  }
+  @media (max-width:640px){
+    .wrap{width:min(100% - 28px,1240px);padding-top:36px}
+    h1{font-size:40px}
+    .jobs-grid,.top10{grid-template-columns:1fr}
+    .group-grid{grid-template-columns:1fr}
+    .scene-bottom,.pain-grid{grid-template-columns:1fr}
+    .agent-map-card{padding:18px;min-height:auto}
+    .agent-chart{height:500px;margin-left:42px;margin-right:8px}
+    .bubble.s{width:64px;height:64px}.bubble.m{width:76px;height:76px}.bubble.l{width:88px;height:88px}
+    .bubble{font-size:9px;padding:0 7px}
+    .quadrant{grid-template-columns:1fr;grid-template-rows:auto}
+    .summary-band{grid-template-columns:1fr}
+    .process{grid-template-columns:repeat(2,1fr)}
+    .section-head{display:block}
+    .section-desc{margin-top:10px}
+  }
+  @media print{
+    body{background:#fff;color:#111}
+    .card,.job,.rank,.table-wrap,.summary-band div,.step,.conclusion{box-shadow:none;background:#fff;border-color:#ddd}
+    .lead,.section-desc,.job p,.muted,.rank span,.summary-band span,.step span,footer{color:#555!important}
+    h1,h2,.job h3,.key-quote,.conclusion p,td{color:#111!important}
+  }
+</style>
+</head>
+<body>
+<nav class="nav" aria-label="章节导航">
+  <a href="#hero" title="总览"></a>
+  <a href="#part1" title="知识/文件依赖"></a>
+  <a href="#part2" title="人工信息处理"></a>
+  <a href="#focus" title="重点工作"></a>
+  <a href="#matrix" title="二维聚焦"></a>
+  <a href="#scenes" title="场景机会卡"></a>
+  <a href="#agentmap" title="Agent 场景机会地图"></a>
+</nav>
+<div class="wrap">
+  <header id="hero">
+    <div class="eyebrow">Knowledge-Intensive Work Landscape</div>
+    <h1>高度依赖已有知识 / 文件的工作，<br>以及其中仍主要靠人工完成的信息处理</h1>
+    <p class="lead">从现实社会中的工作形态出发，不讨论具体技术方案，只回答两个问题：哪些工作高度依赖已有知识与文件？其中哪些工作至今仍有大量“人肉信息处理”环节？</p>
+
+    <div class="hero-grid">
+      <div class="card">
+        <div class="key-quote">判断标准不是“这个岗位是否需要知识”，而是：<br><span>工作质量是否高度取决于能否持续查阅、理解、引用、核对和继承已有资料。</span></div>
+      </div>
+      <div class="stat-stack">
+        <div class="stat"><b>25+</b><small>典型高知识 / 文件依赖职业类别</small></div>
+        <div class="stat"><b>8 类</b><small>高频人工信息处理动作</small></div>
+        <div class="stat"><b>10 类</b><small>人工信息处理最重的典型工作</small></div>
+      </div>
+    </div>
+    <div class="insight-grid">
+      <div class="insight"><div class="num">01</div><b>文件不是辅助，而是工作基础设施</b><span>大量岗位必须依赖历史记录、规则、案例与版本资料才能稳定完成工作。</span></div>
+      <div class="insight"><div class="num">02</div><b>信息处理本身占据大量工作时间</b><span>很多岗位日常核心动作仍是搜索、阅读、比对、核验、整理和重新表达。</span></div>
+      <div class="insight"><div class="num">03</div><b>“高知识依赖 × 高人工处理”是最值得聚焦的交集</b><span>这类工作往往文件密集、规则密集、流程长、出错成本高。</span></div>
+    </div>
+  </header>
+
+  <section id="part1">
+    <div class="section-head">
+      <div><div class="eyebrow">PART 01</div><h2>哪些工作高度依赖已有知识 / 文件？</h2></div>
+      <div class="section-desc">这类工作的共同点是：今天的工作建立在过去的记录、规则、案例和资料上，脱离已有文件体系就很难保证正确性、连续性与可追溯性。</div>
+    </div>
+
+    <div class="jobs-grid">
+      <div class="job"><div class="tag">法律类</div><h3>律师 / 法务 / 合规</h3><p>依赖法律法规、司法解释、判例、合同、证据材料、内部制度与历史处理意见。</p></div>
+      <div class="job"><div class="tag">财务审计类</div><h3>会计 / 审计 / 税务</h3><p>依赖凭证、账簿、报表、税法、财务制度、历史数据与审计底稿。</p></div>
+      <div class="job"><div class="tag">医疗类</div><h3>医生 / 药师 / 医学研究</h3><p>依赖病历、检查报告、诊疗指南、医学文献、既往记录与用药规范。</p></div>
+      <div class="job"><div class="tag">科研学术类</div><h3>研究员 / 教师 / 博士</h3><p>依赖论文、实验记录、研究数据、专著、历史研究成果与项目材料。</p></div>
+      <div class="job"><div class="tag">工程技术类</div><h3>建筑 / 结构 / 机械 / 电气工程师</h3><p>依赖图纸、技术规范、设计标准、计算书、设备资料与版本记录。</p></div>
+      <div class="job"><div class="tag">软件研发类</div><h3>程序员 / 架构师 / 测试 / 运维</h3><p>依赖代码、接口文档、需求文档、技术方案、日志与历史问题记录。</p></div>
+      <div class="job"><div class="tag">政府行政类</div><h3>公务员 / 政策研究 / 公文人员</h3><p>依赖政策法规、红头文件、会议纪要、历史公文、统计材料与口径要求。</p></div>
+      <div class="job"><div class="tag">金融类</div><h3>投资研究 / 信贷 / 风控 / 证券分析</h3><p>依赖财报、研报、评级资料、交易数据、监管规定与历史审批记录。</p></div>
+      <div class="job"><div class="tag">咨询类</div><h3>管理咨询 / 战略咨询 / 行业研究</h3><p>依赖行业报告、访谈材料、历史项目、数据、案例与客户材料。</p></div>
+      <div class="job"><div class="tag">教育类</div><h3>教师 / 教研员 / 培训师</h3><p>依赖教材、课程标准、教案、试题、学生档案与既往教学资料。</p></div>
+      <div class="job"><div class="tag">人力资源类</div><h3>招聘 / 薪酬绩效 / 员工关系</h3><p>依赖简历、岗位说明、绩效记录、制度、劳动法规与员工资料。</p></div>
+      <div class="job"><div class="tag">采购供应链类</div><h3>采购 / 供应链 / 供应商管理</h3><p>依赖合同、报价单、供应商档案、产品规格与历史采购记录。</p></div>
+      <div class="job"><div class="tag">质量管理类</div><h3>QA / QC / 质量工程师</h3><p>依赖标准、检验规范、质量记录、事故报告、认证与供应商资料。</p></div>
+      <div class="job"><div class="tag">项目管理类</div><h3>项目经理 / PMO</h3><p>依赖项目计划、需求、合同、会议纪要、进度报告、风险记录与决策记录。</p></div>
+      <div class="job"><div class="tag">保险类</div><h3>核保 / 理赔 / 精算</h3><p>依赖保单、条款、病历、事故材料、赔付记录、规则与历史数据。</p></div>
+      <div class="job"><div class="tag">知识产权类</div><h3>专利代理 / 商标代理 / IP 法务</h3><p>依赖专利文献、技术交底书、审查意见、商标资料与历史申请材料。</p></div>
+      <div class="job"><div class="tag">档案文博类</div><h3>档案管理员 / 文博研究</h3><p>依赖档案、史料、目录、鉴定记录、历史文献与馆藏资料。</p></div>
+      <div class="job"><div class="tag">新闻出版类</div><h3>编辑 / 记者 / 出版策划</h3><p>依赖历史报道、采访资料、书稿、事实资料、出版规范与版本记录。</p></div>
+      <div class="job"><div class="tag">市场品牌类</div><h3>品牌 / 市场策划 / 广告策划</h3><p>依赖市场报告、品牌规范、历史活动、消费者研究与投放复盘。</p></div>
+      <div class="job"><div class="tag">销售商务类</div><h3>大客户销售 / 售前 / 商务</h3><p>依赖客户资料、合同、产品资料、报价、历史合作记录与项目方案。</p></div>
+      <div class="job"><div class="tag">客服支持类</div><h3>客服 / 售后 / 技术支持</h3><p>依赖产品手册、FAQ、故障记录、工单、服务规范与历史案例。</p></div>
+      <div class="job"><div class="tag">建筑施工类</div><h3>施工管理 / 监理 / 造价</h3><p>依赖图纸、合同、工程量清单、施工规范、验收资料与签证记录。</p></div>
+      <div class="job"><div class="tag">航空航运类</div><h3>签派 / 航空维修 / 船舶管理</h3><p>依赖操作手册、维修手册、航图、法规、检查记录与维修历史。</p></div>
+      <div class="job"><div class="tag">制药生物类</div><h3>药品研发 / 注册 / 临床 / 质量</h3><p>依赖 SOP、试验记录、法规、申报资料、临床数据与质量文件。</p></div>
+      <div class="job"><div class="tag">制造业类</div><h3>工艺 / 生产 / 设备工程</h3><p>依赖 BOM、工艺文件、设备手册、质量标准、生产记录与异常报告。</p></div>
+    </div>
+
+    <div class="summary-band">
+      <div><b>历史连续性</b><span>今天的决策建立在过去记录与结果上</span></div>
+      <div><b>高错误成本</b><span>不能只靠记忆，需要有明确资料依据</span></div>
+      <div><b>规则密集</b><span>法规、制度、技术标准长期约束工作</span></div>
+      <div><b>强可追溯</b><span>需要回答“依据是什么、以前怎么处理”</span></div>
+      <div><b>专业专属性</b><span>大量知识存在于组织内部或专业领域</span></div>
+    </div>
+  </section>
+
+  <section id="part2">
+    <div class="section-head">
+      <div><div class="eyebrow">PART 02</div><h2>其中，哪些工作仍主要靠人工完成信息处理？</h2></div>
+      <div class="section-desc">进一步筛选后，重点不是“知识要求高”，而是人的日常工作本身是否仍在大量执行找、读、筛、比、填、核、写、传等信息动作。</div>
+    </div>
+
+    <div class="matrix">
+      <div class="card">
+        <h3>不是所有知识型工作，都属于“人工信息处理重”</h3>
+        <ul>
+          <li>外科医生：专业知识要求极高，但核心价值发生在诊疗与操作。</li>
+          <li>飞行员：规程与知识很多，但主要价值是实时判断与操作。</li>
+          <li>高级设计师：会参考大量资料，但核心仍是创造与决策。</li>
+          <li>厨师：高度依赖经验，但主体不是文档型信息处理。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>真正“人肉信息处理重”的典型状态</h3>
+        <ul>
+          <li>一天大量时间都在打开文件、搜索资料、切换窗口。</li>
+          <li>重复阅读、摘录、复制、比对、核验和整理。</li>
+          <li>最终成果多为报告、意见、表格、材料或审批结果。</li>
+          <li>人的价值很大一部分消耗在“处理已有信息”本身。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="process">
+      <div class="step"><b>找</b><span>搜索文件 / 规定 / 案例</span></div>
+      <div class="step"><b>读</b><span>阅读长文档与资料</span></div>
+      <div class="step"><b>筛</b><span>筛选有用内容与对象</span></div>
+      <div class="step"><b>比</b><span>跨文件 / 跨版本比较</span></div>
+      <div class="step"><b>填</b><span>录入、摘录、补全信息</span></div>
+      <div class="step"><b>核</b><span>按规则检查与核验</span></div>
+      <div class="step"><b>写</b><span>形成意见 / 报告 / 材料</span></div>
+      <div class="step"><b>传</b><span>流转、汇总、归档与同步</span></div>
+    </div>
+
+    <div class="group-grid">
+      <div class="group"><b>材料生产型</b><span>公文、标书、报告、申报材料、汇报稿</span></div>
+      <div class="group"><b>审核核验型</b><span>合同、审计、理赔、合规、质量检查</span></div>
+      <div class="group"><b>检索研究型</b><span>法律、政策、科研、证券、行业研究</span></div>
+      <div class="group"><b>比对判断型</b><span>信贷、采购、专利、候选人筛选</span></div>
+      <div class="group"><b>录入整理型</b><span>档案、票据、凭证、合同台账、病例资料</span></div>
+      <div class="group"><b>汇总汇报型</b><span>PMO、经营分析、销售运营、行政汇报</span></div>
+      <div class="group"><b>知识答复型</b><span>客服、售后、技术支持、内部咨询</span></div>
+      <div class="group"><b>多文件协同型</b><span>工程、诉讼、医药注册、复杂项目</span></div>
+    </div>
+
+    <div class="table-wrap" style="margin-top:24px">
+      <table>
+        <thead>
+          <tr><th>工作</th><th>人工信息处理主要在做什么</th><th>人工处理程度</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>律师 / 企业法务</td><td class="muted">找法规、翻合同、比条款、核事实、整理证据、写法律意见</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>合同管理员</td><td class="muted">收合同、录信息、核条款、跟版本、找附件、归档</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>会计</td><td class="muted">看票据、核凭证、分类、录入、对账、异常核查</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>审计</td><td class="muted">调资料、抽凭证、核记录、比数据、整理审计底稿</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>税务</td><td class="muted">查政策、核数据、准备申报材料、解释差异</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>银行信贷审批</td><td class="muted">看企业资料、财报、流水、征信、合同，形成审批意见</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>保险核保 / 理赔</td><td class="muted">看保单、病历、事故资料、发票，判断是否赔付</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>采购</td><td class="muted">收报价、比供应商、查历史采购、整理合同、审批材料</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>招投标</td><td class="muted">读招标文件、拆要求、找材料、填表、组合文档、检查遗漏</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>政府行政 / 公文</td><td class="muted">收材料、查历史文件、汇总、核口径、写公文、报材料</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>政策研究</td><td class="muted">搜政策、读文件、比地区、整理数据、写分析</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>科研人员</td><td class="muted">查论文、读文献、整理实验数据、做综述、写论文</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>医学研究 / 药品注册</td><td class="muted">查法规、整理试验数据、制作申报材料、核资料</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>医生</td><td class="muted">看病历、检查结果、指南、既往记录，再做判断</td><td><span class="level midhigh"><i class="dot"></i>中高</span></td></tr>
+          <tr><td>专利代理</td><td class="muted">查专利、读技术资料、比现有技术、整理申请文件</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>咨询顾问</td><td class="muted">搜资料、看报告、访谈整理、数据分析、做汇报材料</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>行业 / 证券研究</td><td class="muted">搜资料、读财报、看研报、摘数据、比公司、写报告</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>HR 招聘</td><td class="muted">看简历、筛候选人、整理面试记录、核信息</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>HR 员工关系</td><td class="muted">查制度、看员工资料、劳动合同、记录、政策</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>项目经理 / PMO</td><td class="muted">看周报、会议纪要、任务、需求、风险，汇总项目状态</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>客服</td><td class="muted">查知识库、订单、历史工单，再组织回答</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>技术支持</td><td class="muted">查手册、历史故障、日志、客户描述，再定位问题</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>软件测试</td><td class="muted">读需求、写用例、核结果、整理缺陷、回归验证</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>运维</td><td class="muted">看告警、日志、文档、历史事故，判断问题</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>质量管理</td><td class="muted">看检验记录、标准、异常报告、供应商材料</td><td><span class="level high"><i class="dot"></i>很高</span></td></tr>
+          <tr><td>工程造价</td><td class="muted">看图纸、清单、定额、合同，算量、核价、对账</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>建筑 / 工程设计</td><td class="muted">查规范、读图纸、核参数、改版本、整理设计文件</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>档案管理</td><td class="muted">分类、著录、命名、查重、归档、调阅</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>编辑 / 出版</td><td class="muted">审稿、校对、查事实、核引用、版本修改</td><td><span class="level extreme"><i class="dot"></i>极高</span></td></tr>
+          <tr><td>记者</td><td class="muted">搜资料、整理采访、核事实、查背景、写稿</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>销售运营</td><td class="muted">整理客户资料、销售数据、报价、合同、报表</td><td><span class="level high"><i class="dot"></i>高</span></td></tr>
+          <tr><td>大客户销售</td><td class="muted">查客户背景、历史往来、产品材料，准备方案</td><td><span class="level midhigh"><i class="dot"></i>中高</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <section id="focus">
+    <div class="section-head">
+      <div><div class="eyebrow">FOCUS</div><h2>人工信息处理最重的 10 类典型工作</h2></div>
+      <div class="section-desc">这里不是对职业价值做高低判断，而是强调：这些工作中，有相当比例的时间消耗在已有信息的搜集、读取、比对、核验、整理与重新表达上。</div>
+    </div>
+
+    <div class="focus-insight">
+      <div class="focus-label">Core Finding<strong>核心发现</strong></div>
+      <div class="focus-copy">
+        <div class="focus-main">大量知识工作，本质上是在<strong style="color:var(--cyan)">已有信息之上持续加工</strong>，而不是持续生产新的原始信息。</div>
+        <div class="focus-flow">
+          <span class="em">搜集</span><i>→</i><span>阅读</span><i>→</i><span class="em">筛选</span><i>→</i><span>拼接</span><i>→</i><span class="em">比对</span><i>→</i><span class="em">核验</span><i>→</i><span>汇总</span><i>→</i><span class="em">重新表达</span>
+        </div>
+        <div class="focus-formula"><strong>共同特征：</strong>知识 / 文件依赖高 × 人工信息处理占比高</div>
+      </div>
+    </div>
+
+    <div class="top10">
+      <div class="rank"><div class="n">01</div><b>招投标</b><span>材料密集、规则密集、组合与校验工作量大</span></div>
+      <div class="rank"><div class="n">02</div><b>政府材料 / 公文</b><span>历史文件、口径、汇总、写作高度依赖人工</span></div>
+      <div class="rank"><div class="n">03</div><b>法务合同</b><span>合同、法规、历史条款长期交叉比对</span></div>
+      <div class="rank"><div class="n">04</div><b>审计</b><span>资料调取、凭证核验、底稿整理高度密集</span></div>
+      <div class="rank"><div class="n">05</div><b>会计核算</b><span>票据、凭证、录入、对账与异常核查反复发生</span></div>
+      <div class="rank"><div class="n">06</div><b>保险理赔</b><span>多来源材料核验、规则判断与结论形成</span></div>
+      <div class="rank"><div class="n">07</div><b>医药注册</b><span>法规、试验、申报资料高度结构化且复杂</span></div>
+      <div class="rank"><div class="n">08</div><b>咨询研究</b><span>搜集—阅读—归纳—分析—汇报链条长</span></div>
+      <div class="rank"><div class="n">09</div><b>工程造价</b><span>图纸、清单、定额、合同之间持续核算比对</span></div>
+      <div class="rank"><div class="n">10</div><b>项目管理 / PMO</b><span>会议纪要、周报、任务、风险长期汇总与同步</span></div>
+    </div>
+  </section>
+
+  <section id="matrix">
+    <div class="section-head">
+      <div><div class="eyebrow">SYNTHESIS</div><h2>把两类判断放在一起：真正值得关注的是右上象限</h2></div>
+      <div class="section-desc">横轴代表对已有知识 / 文件的依赖程度，纵轴代表当前人工信息处理强度。这里是基于前述职业工作流的定性归类，用于汇报聚焦，不代表统计调查结果。</div>
+    </div>
+    <div class="quadrant">
+      <div class="quad"><div class="qtitle">高知识依赖 × 中低人工处理</div><div class="qdesc">专业知识要求很高，但核心价值更多来自现场操作、实时判断或创造。</div><div class="pills"><span class="pill">外科医生</span><span class="pill">飞行员</span><span class="pill">高级设计</span></div></div>
+      <div class="quad hot"><div class="kicker">重点交集</div><div class="qtitle">高知识依赖 × 高人工处理</div><div class="qdesc">文件密集、规则密集、需要持续搜索 / 阅读 / 比对 / 核验 / 汇总。</div><div class="pills"><span class="pill">招投标</span><span class="pill">法务合同</span><span class="pill">审计</span><span class="pill">医药注册</span><span class="pill">咨询研究</span><span class="pill">工程造价</span><span class="pill">政府材料</span><span class="pill">保险理赔</span><span class="pill">项目管理 / PMO</span></div></div>
+      <div class="quad"><div class="qtitle">低知识依赖 × 中低人工处理</div><div class="qdesc">更多依赖现场服务、操作经验、体力或即时执行。</div><div class="pills"><span class="pill">快递配送</span><span class="pill">基础服务</span><span class="pill">现场操作</span></div></div>
+      <div class="quad"><div class="qtitle">中等知识依赖 × 高人工处理</div><div class="qdesc">信息操作很多，但专业文件或历史知识未必是决定性基础。</div><div class="pills"><span class="pill">基础数据录入</span><span class="pill">常规行政整理</span><span class="pill">部分销售运营</span></div></div>
+    </div>
+    <div class="axis-note"><span>← 对已有知识 / 文件依赖较低</span><span>对已有知识 / 文件依赖较高 →</span></div>
+    <div class="callout"><strong>汇报重点：</strong>并不是所有知识型工作都“人工处理重”。真正需要单独关注的是：文件与知识高度决定工作质量，同时大量时间仍被人工信息处理动作占据的岗位。</div>
+  </section>
+
+  <section id="scenes">
+    <div class="section-head">
+      <div><div class="eyebrow">PART 03 · OPPORTUNITY CARDS</div><h2>重点交集进一步拆解：9 个典型场景机会卡</h2></div>
+      <div class="section-desc">从“高知识 / 文件依赖 × 高人工信息处理”的交集中，进一步拆解具体工作场景。这里关注的是工作如何发生、人在处理什么信息，以及最终形成什么交付物。</div>
+    </div>
+
+    <div class="scene-intro">
+      <div class="card">
+        <div class="kicker">场景卡阅读方式</div>
+        <h3>从职业名称，下钻到具体工作链路</h3>
+        <p>每张卡统一呈现「角色 → 依赖资料 → 当前人工流程 → 核心痛点 → 最终产出」，避免只停留在“某个行业很依赖文件”的宽泛判断。</p>
+      </div>
+      <div class="card scene-count">
+        <strong>9</strong>
+        <span>个典型高知识依赖、且人工信息处理强度较高的工作场景</span>
+      </div>
+    </div>
+
+    <div class="scene-grid">
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 01</div><h3>招投标材料编制</h3><div class="scene-role">投标专员 / 售前 / 商务人员</div></div><div class="scene-badge">材料生产型</div></div>
+        <p class="scene-desc">收到招标文件后，需要理解并拆解要求，再从大量历史与企业资料中寻找对应内容，组合形成完整投标文件。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">招标文件</span><span class="file-pill">历史标书</span><span class="file-pill">企业资质</span><span class="file-pill">产品资料</span><span class="file-pill">客户案例</span><span class="file-pill">报价文件</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>读文件</span><i>→</i><span>拆要求</span><i>→</i><span>找材料</span><i>→</i><span>写响应</span><i>→</i><span>核评分项</span><i>→</i><span>排版检查</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">长文件要求提取耗时</div><div class="pain">资质与案例反复搜索</div><div class="pain">历史标书复用困难</div><div class="pain">遗漏与错填风险高</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>投标文件 / 技术与商务应答</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>流程标准化</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 02</div><h3>法务合同审核</h3><div class="scene-role">企业法务 / 合同管理员 / 律师</div></div><div class="scene-badge">审核核验型</div></div>
+        <p class="scene-desc">收到业务合同后，结合公司模板、历史合同和相关规定，对关键条款逐项判断，并形成风险与修改意见。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">待审合同</span><span class="file-pill">标准模板</span><span class="file-pill">历史合同</span><span class="file-pill">公司制度</span><span class="file-pill">法律法规</span><span class="file-pill">风险案例</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>读合同</span><i>→</i><span>找模板</span><i>→</i><span>比条款</span><i>→</i><span>查法规</span><i>→</i><span>标风险</span><i>→</i><span>写意见</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">长合同逐条阅读</div><div class="pain">同类条款重复审核</div><div class="pain">跨文件确认依据</div><div class="pain">审核存在遗漏风险</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>带批注合同 / 风险清单 / 审核意见</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>错误成本</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 03</div><h3>审计底稿整理</h3><div class="scene-role">内部审计 / 会计师事务所审计人员</div></div><div class="scene-badge">审核核验型</div></div>
+        <p class="scene-desc">围绕审计事项，从财务和业务材料中调取证据、核对数据、识别异常，并把过程证据沉淀为完整底稿。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">财务报表</span><span class="file-pill">会计凭证</span><span class="file-pill">发票</span><span class="file-pill">合同</span><span class="file-pill">银行流水</span><span class="file-pill">历史底稿</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>调资料</span><i>→</i><span>分类</span><i>→</i><span>抽样</span><i>→</i><span>核凭证</span><i>→</i><span>找异常</span><i>→</i><span>写底稿</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">文件与数据量巨大</div><div class="pain">多格式频繁切换</div><div class="pain">原始凭证反复核验</div><div class="pain">证据归集工作重复</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>审计底稿 / 异常清单 / 审计报告</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>核验强度</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 04</div><h3>医药注册申报</h3><div class="scene-role">药品注册专员 / 医疗器械注册 / RA</div></div><div class="scene-badge">多文件协同型</div></div>
+        <p class="scene-desc">按照监管要求，把研发、临床、生产和质量等多类材料组织成申报体系，并持续完成一致性检查与补件。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">法规指南</span><span class="file-pill">研发资料</span><span class="file-pill">临床数据</span><span class="file-pill">检测报告</span><span class="file-pill">质量文件</span><span class="file-pill">历史申报</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>解读法规</span><i>→</i><span>拆要求</span><i>→</i><span>收资料</span><i>→</i><span>核一致性</span><i>→</i><span>编材料</span><i>→</i><span>补件</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">法规与要求复杂</div><div class="pain">申报文件数量巨大</div><div class="pain">跨文件交叉引用多</div><div class="pain">一致性检查成本高</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>注册申报资料 / 补充材料 / 合规检查</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>专业门槛</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 05</div><h3>咨询 / 行业研究</h3><div class="scene-role">咨询顾问 / 行业研究员 / 战略研究</div></div><div class="scene-badge">检索研究型</div></div>
+        <p class="scene-desc">围绕一个商业或行业问题，大量搜集、阅读、比较不同来源材料，并把分散证据组织成观点与汇报结论。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">行业报告</span><span class="file-pill">公司资料</span><span class="file-pill">访谈纪要</span><span class="file-pill">历史项目</span><span class="file-pill">市场数据</span><span class="file-pill">政策 / 财报</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>定义问题</span><i>→</i><span>搜资料</span><i>→</i><span>读与摘</span><i>→</i><span>比较</span><i>→</i><span>形成判断</span><i>→</i><span>写报告</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">阅读材料数量大</div><div class="pain">来源高度分散</div><div class="pain">相同主题反复搜索</div><div class="pain">从资料到结论整理重</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>研究报告 / 战略报告 / 行业分析 / PPT</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>认知加工</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 06</div><h3>工程造价核算</h3><div class="scene-role">造价工程师 / 成本工程师 / 预算员</div></div><div class="scene-badge">比对判断型</div></div>
+        <p class="scene-desc">根据图纸、工程量清单、定额和合同要求，持续完成工程量计算、价格核定、变更核对与造价汇总。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">施工图纸</span><span class="file-pill">工程量清单</span><span class="file-pill">定额</span><span class="file-pill">合同</span><span class="file-pill">变更单</span><span class="file-pill">历史项目</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>看图</span><i>→</i><span>找工程项</span><i>→</i><span>算量</span><i>→</i><span>查定额</span><i>→</i><span>核变更</span><i>→</i><span>汇总造价</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">图纸与清单信息量大</div><div class="pain">文件对应关系复杂</div><div class="pain">变更触发重复核算</div><div class="pain">数量价格错误成本高</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>工程量清单 / 预算书 / 结算书</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>数据核验</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 07</div><h3>政府材料 / 公文</h3><div class="scene-role">行政人员 / 政策研究 / 综合文字岗</div></div><div class="scene-badge">汇总汇报型</div></div>
+        <p class="scene-desc">围绕政策执行、领导汇报或上级要求，从历史文件与多部门材料中汇总信息，统一口径后形成正式材料。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">政策文件</span><span class="file-pill">上级文件</span><span class="file-pill">历史公文</span><span class="file-pill">领导讲话</span><span class="file-pill">会议纪要</span><span class="file-pill">统计数据</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>接任务</span><i>→</i><span>找文件</span><i>→</i><span>收材料</span><i>→</i><span>核口径</span><i>→</i><span>汇总</span><i>→</i><span>写公文</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">历史文件量庞大</div><div class="pain">政策口径必须准确</div><div class="pain">部门材料格式不统一</div><div class="pain">同类内容反复汇总</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>汇报材料 / 请示 / 通知 / 工作总结</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>口径要求</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 08</div><h3>保险理赔审核</h3><div class="scene-role">保险理赔员 / 核赔人员</div></div><div class="scene-badge">审核核验型</div></div>
+        <p class="scene-desc">收到客户理赔申请后，需要综合保单、事故证明、医疗材料和保险条款，判断责任范围与赔付金额。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">保单</span><span class="file-pill">保险条款</span><span class="file-pill">医疗病历</span><span class="file-pill">诊断证明</span><span class="file-pill">发票</span><span class="file-pill">历史赔案</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>收申请</span><i>→</i><span>查完整性</span><i>→</i><span>读保单</span><i>→</i><span>核事故资料</span><i>→</i><span>判断责任</span><i>→</i><span>核金额</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">单案件资料类型多</div><div class="pain">材料完整性检查繁琐</div><div class="pain">条款与事实逐项对应</div><div class="pain">异常案件回看历史多</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>核赔意见 / 理赔金额 / 补件或拒赔说明</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★★</span></div><div class="metric"><span>规则密集</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+
+      <article class="scene-card">
+        <div class="scene-top"><div><div class="scene-id">SCENE 09</div><h3>项目管理 / PMO</h3><div class="scene-role">项目经理 / PMO / 项目负责人</div></div><div class="scene-badge">汇总汇报型</div></div>
+        <p class="scene-desc">持续从会议、任务、周报和项目文件中获取最新状态，把分散信息汇总成项目整体进度、风险与决策上下文。</p>
+        <div class="scene-label">依赖资料</div><div class="file-pills"><span class="file-pill">项目计划</span><span class="file-pill">需求文档</span><span class="file-pill">会议纪要</span><span class="file-pill">周报</span><span class="file-pill">任务记录</span><span class="file-pill">风险 / 决策记录</span></div>
+        <div class="scene-label">当前人工流程</div><div class="flow"><span>收进展</span><i>→</i><span>看任务</span><i>→</i><span>查纪要</span><i>→</i><span>找人确认</span><i>→</i><span>汇总状态</span><i>→</i><span>写周报</span></div>
+        <div class="scene-label">核心痛点</div><div class="pain-grid"><div class="pain">项目信息高度分散</div><div class="pain">状态依赖人工同步</div><div class="pain">会议结论与执行脱节</div><div class="pain">同一信息反复汇报</div></div>
+        <div class="scene-bottom"><div class="output-box"><b>最终产出</b><span>项目周报 / 进度汇报 / 风险清单 / 复盘</span></div><div class="metrics"><b>机会特征</b><div class="metric"><span>文件依赖</span><span class="stars">★★★★★</span></div><div class="metric"><span>人工处理</span><span class="stars">★★★★☆</span></div><div class="metric"><span>发生频率</span><span class="stars">★★★★★</span></div></div></div>
+      </article>
+    </div>
+
+    <div class="scene-note"><strong>说明：</strong>这些卡片是对典型工作流程的结构化拆解，用于帮助汇报从“职业/行业判断”进入“具体工作场景”。其中星级仍为定性表达，不代表统一口径的统计测量。</div>
+  </section>
+
+
+  <section id="agentmap">
+    <div class="section-head">
+      <div><div class="eyebrow">PART 04 · AGENT OPPORTUNITY MAP</div><h2>Agent 场景机会地图：从“有痛点”进一步判断“哪里更值得做 Agent”</h2></div>
+      <div class="section-desc">前述 9 个场景都具有较强的知识 / 文件依赖与人工信息处理负担，但适合 Agent 的程度与形态并不相同。这里进一步用“知识处理复杂度 × 任务规则化程度”拉开差异。</div>
+    </div>
+
+    <div class="agent-map-layout">
+      <div class="agent-map-card">
+        <div class="kicker">二维机会地图 · 定性判断</div>
+        <div class="agent-chart" aria-label="Agent 场景机会二维地图">
+          <div class="agent-zone zone-b"><span class="zone-name">B · 知识协作型 Agent</span>知识复杂，但最终判断更开放；Agent 更适合承担搜、读、摘、比、汇，人保留核心判断。</div>
+          <div class="agent-zone zone-a"><span class="zone-name">A · 知识工作流 Agent</span>知识复杂、流程明确、结果可交付，最有机会形成“理解 → 检索 → 判断 → 执行 → 交付”的闭环。</div>
+          <div class="agent-zone zone-c"><span class="zone-name">C · 智能流程增强</span>规则化程度高，但部分问题可由规则引擎、专业系统与 AI 组合解决，不一定需要高自主 Agent。</div>
+
+          <div class="axis-y">知识处理复杂度 / 跨文件推理强度</div>
+          <div class="axis-x">任务规则化 / 工作流化程度</div>
+          <span class="axis-high-y">高</span><span class="axis-low-y">低</span>
+          <span class="axis-low-x">低</span><span class="axis-high-x">高</span>
+
+          <div class="bubble b l" style="left:28%;top:21%">咨询研究<small>协作型</small></div>
+          <div class="bubble b m" style="left:39%;top:32%">政府材料<small>协作型</small></div>
+          <div class="bubble b m" style="left:44%;top:44%">项目管理<br>/ PMO</div>
+
+          <div class="bubble a l" style="left:72%;top:18%">医药注册<small>核心机会</small></div>
+          <div class="bubble a l" style="left:66%;top:35%">招投标<small>核心机会</small></div>
+          <div class="bubble a l" style="left:79%;top:39%">法务合同<small>核心机会</small></div>
+          <div class="bubble a m" style="left:72%;top:56%">审计<small>核心机会</small></div>
+
+          <div class="bubble c m" style="left:84%;top:72%">保险理赔<small>流程增强</small></div>
+          <div class="bubble c m" style="left:68%;top:78%">工程造价<small>流程增强</small></div>
+        </div>
+        <div class="agent-footnote">注：气泡位置与大小为基于前述场景拆解的探索性、定性判断，用于比较相对机会，不代表统计测量或市场规模数据。</div>
+      </div>
+
+      <aside class="agent-side">
+        <div class="agent-side-card primary">
+          <div class="num">KEY JUDGEMENT</div>
+          <h3>不是“人工最重”就最适合 Agent</h3>
+          <p>真正优先的机会，是那些同时具备<strong style="color:#eaf2ff">知识复杂、跨文件处理、任务可拆解、判断有依据、结果可交付</strong>的工作场景。</p>
+        </div>
+
+        <div class="agent-side-card">
+          <div class="num">THREE TYPES</div>
+          <h3>三类机会形态</h3>
+          <div class="agent-tier"><span class="agent-dot a"></span><div><strong>A · 知识工作流 Agent</strong><span>招投标 / 法务合同 / 审计 / 医药注册</span></div></div>
+          <div class="agent-tier"><span class="agent-dot b"></span><div><strong>B · 知识协作型 Agent</strong><span>咨询研究 / 政府材料 / 项目管理 PMO</span></div></div>
+          <div class="agent-tier"><span class="agent-dot c"></span><div><strong>C · 智能流程增强</strong><span>保险理赔 / 工程造价</span></div></div>
+        </div>
+
+        <div class="agent-side-card">
+          <div class="num">WHY A FIRST</div>
+          <h3>A 类更像真正的 Agent 主战场</h3>
+          <p>它们不仅需要“读懂知识”，还需要持续调用资料、按规则判断、组织下一步动作，并最终形成可以直接交付的结果。</p>
+        </div>
+      </aside>
+    </div>
+
+    <div class="agent-priority">
+      <div>
+        <div class="big">优先验证：<em>招投标 / 法务合同 / 审计 / 医药注册</em></div>
+        <div class="small">建议下一步围绕真实工作流继续验证：任务频率、单次耗时、文件来源、判断规则、结果验收标准，以及人必须介入的关键节点。</div>
+      </div>
+      <div class="priority-tags"><span>知识密集</span><span>跨文件处理</span><span>任务可拆解</span><span>判断有依据</span><span>结果可交付</span></div>
+    </div>
+  </section>
+
+
+  <div class="method"><strong>说明：</strong>本页中的“高 / 很高 / 极高”与 TOP10 为基于典型工作流程的定性判断，用于建立社会工作版图与汇报聚焦，并非来自统一口径的统计调查。若用于正式决策，建议后续用岗位访谈、工时数据或行业研究进一步验证。</div>
+
+  <footer>汇报用途 · 从知识 / 文件依赖到人工信息处理，再下钻至重点场景与 Agent 机会判断</footer>
+</div>
+</body>
+</html>
