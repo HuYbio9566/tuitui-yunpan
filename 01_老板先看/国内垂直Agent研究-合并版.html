@@ -162,7 +162,32 @@
     .btn.primary:hover { background: var(--brand-dark); }
 
     .content { width: min(1180px, calc(100% - 64px)); margin: 0 auto; padding: 34px 0 80px; }
-    .report-head { padding: 8px 0 30px; }
+    .report-head {
+      position: relative;
+      isolation: isolate;
+      width: calc(100% + 64px);
+      margin: -34px -32px 0;
+      padding: 56px 32px 48px;
+      overflow: hidden;
+      color: #f7f9ff;
+      background-color: #111a2a;
+      background-image:
+        repeating-linear-gradient(135deg, rgba(255,255,255,.045) 0, rgba(255,255,255,.045) 1px, transparent 1px, transparent 18px),
+        repeating-linear-gradient(45deg, rgba(91,141,220,.08) 0, rgba(91,141,220,.08) 1px, transparent 1px, transparent 30px);
+    }
+    .report-head::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(115deg, rgba(31,77,159,.42), transparent 52%, rgba(24,122,90,.16));
+    }
+    .report-head .scope-line { color: #a9c7ff; }
+    .report-head .scope-line::before { background: #76a9ff; }
+    .report-head h1 { color: #fff; }
+    .report-head .report-lead { color: rgba(247,249,255,.78); }
+    .report-head .report-meta { color: rgba(247,249,255,.58); }
     .scope-line {
       display: flex;
       align-items: center;
@@ -486,6 +511,7 @@
       .breadcrumb { display: none; }
       .actions { width: 100%; justify-content: flex-end; }
       .content { width: min(100% - 36px, 1180px); padding-top: 24px; }
+      .report-head { width: calc(100% + 36px); margin: -24px -18px 0; padding: 42px 20px 36px; }
       .decision-band, .summary-strip, .product-identity, .two-col, .evidence-grid, .roadmap { grid-template-columns: 1fr; }
       .decision, .summary-item, .evidence-cell, .roadmap-step { border-right: 0; border-bottom: 1px solid var(--line); }
       .decision:last-child, .summary-item:last-child, .evidence-cell:last-child, .roadmap-step:last-child { border-bottom: 0; }
@@ -506,6 +532,7 @@
       .topbar { padding-inline: 14px; }
       .btn { min-height: 44px; }
       .content { width: min(100% - 28px, 1180px); }
+      .report-head { width: calc(100% + 28px); margin-right: -14px; margin-left: -14px; padding: 36px 16px 32px; }
       h1 { font-size: 30px; }
       .report-lead { font-size: 15px; }
       .section { padding: 36px 0; }
