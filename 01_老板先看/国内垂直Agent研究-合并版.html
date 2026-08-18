@@ -1278,6 +1278,8 @@
           h1,h2,h3,h4 { color:var(--text)!important; letter-spacing:0!important; }
           h1 { font-size:20px!important; line-height:1.5!important; margin:0 0 12px!important; }
           .lead { font-size:16px!important; line-height:1.6!important; }
+          .section-head { display:block!important; margin-bottom:18px!important; }
+          .section-head > .section-desc { margin-top:7px!important; max-width:none!important; text-align:left!important; }
           p,.section-desc,.lead,.job p,.muted,.rank span,.summary-band span,.step span,footer { color:var(--muted)!important; }
           .eyebrow,.tag,.scene-id,.kicker,.focus-label { color:var(--blue)!important; }
           .card,.job,.rank,.table-wrap,.summary-band>div,.step,.conclusion,.group,.focus-insight,.scene-card,.scene-note,.agent-map-card,.agent-side-card,.agent-priority,.method { background:var(--panel)!important; border-color:var(--line)!important; box-shadow:none!important; border-radius:8px!important; }
@@ -1311,6 +1313,16 @@
           }
           const match = labels.find(([from]) => node.textContent.trim() === from);
           if (match) node.textContent = match[1];
+        });
+        shadow.querySelectorAll('.section-head').forEach((head) => {
+          const eyebrow = head.querySelector('.eyebrow');
+          const title = head.querySelector('h2');
+          if (!eyebrow || !title) return;
+          const prefix = eyebrow.textContent.trim().match(/^01\.\d+/)?.[0];
+          eyebrow.remove();
+          if (prefix && !title.textContent.trim().startsWith(prefix)) {
+            title.textContent = `${prefix} ${title.textContent.trim()}`;
+          }
         });
         host.classList.add('is-loaded');
       } catch (error) {
