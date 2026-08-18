@@ -107,6 +107,10 @@
       font-weight: 600;
     }
     .toc { display: grid; gap: 2px; }
+    .toc-primary { margin: 0 0 4px; padding: 7px 12px; color: var(--brand-dark); font-size: 12px; font-weight: 800; line-height: 1.4; }
+    .toc-group-label { margin: 18px 0 4px; padding: 0 12px; color: var(--brand-dark); font-size: 11px; font-weight: 800; line-height: 1.4; }
+    .toc-subgroup { display: grid; gap: 2px; padding-left: 10px; }
+    .toc .toc-subgroup a { grid-template-columns: 42px minmax(0, 1fr); padding-left: 12px; font-size: 12px; }
     .toc a {
       display: grid;
       grid-template-columns: 24px minmax(0, 1fr);
@@ -118,8 +122,8 @@
       text-decoration: none;
       font-size: 12px;
     }
-    .toc a:hover { color: var(--ink); background: var(--surface-2); }
-    .toc a.active { color: var(--brand-dark); border-left-color: var(--brand); background: var(--brand-soft); font-weight: 600; }
+    .toc-subgroup a:hover { color: var(--ink); background: var(--surface-2); }
+    .toc-subgroup a.active { color: var(--brand-dark); border-left-color: var(--brand); background: var(--brand-soft); font-weight: 600; }
     .toc-num { color: var(--muted); font-variant-numeric: tabular-nums; }
     .toc-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .sidebar-note {
@@ -662,8 +666,52 @@
     .benchmark-tools { display: flex; justify-content: flex-end; align-items: flex-start; }
     .benchmark-switch-btn { border: 0; border-radius: 5px; padding: 7px 13px; color: var(--muted); background: transparent; font: inherit; font-size: 11px; cursor: pointer; }
     .benchmark-switch-btn.active { color: var(--ink); background: var(--surface); box-shadow: 0 1px 3px rgba(20,35,60,.12); }
-    .industry-subsection { margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--line); }
-    .industry-subsection .section-head { margin-bottom: 14px; }
+    #industry-breakdown { padding-top: 48px; }
+    #industry-breakdown .shell { display: block; max-width: none; padding: 0; }
+    #industry-breakdown .section-head { margin-bottom: 23px; }
+    #industry-breakdown .industry-stack { display: grid; gap: 18px; }
+    #industry-breakdown .industry-card { background: #fff; border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 18px 50px rgba(31,54,88,.10); overflow: hidden; position: relative; }
+    #industry-breakdown .industry-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--accent); }
+    #industry-breakdown .industry-head { display: flex; justify-content: space-between; gap: 20px; padding: 27px 30px 21px; border-bottom: 1px solid #edf1f5; }
+    #industry-breakdown .industry-head h3 { font-size: 25px; margin: 6px 0 7px; letter-spacing: -.03em; }
+    #industry-breakdown .industry-head p { margin: 0; color: #64748a; font-size: 14px; max-width: 800px; }
+    #industry-breakdown .score { display: flex; gap: 7px; align-items: center; text-align: right; color: #8490a2; min-width: 94px; }
+    #industry-breakdown .score strong { font-size: 42px; line-height: 1; color: var(--accent); letter-spacing: -.07em; }
+    #industry-breakdown .score span { font-size: 10px; line-height: 1.35; }
+    #industry-breakdown .industry-layout { display: grid; grid-template-columns: 1.16fr .84fr; }
+    #industry-breakdown .industry-main { padding: 25px 30px 27px; border-right: 1px solid #edf1f5; }
+    #industry-breakdown .subhead { margin: 0 0 10px; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #6c7b91; font-weight: 800; }
+    #industry-breakdown .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+    #industry-breakdown .pill { display: inline-block; border-radius: 999px; padding: 5px 9px; font-size: 11px; line-height: 1.25; }
+    #industry-breakdown .pill-core { background: #edf8f2; color: #087443; }
+    #industry-breakdown .pill-support { background: #f2f4f7; color: #65748a; }
+    #industry-breakdown .support-row { margin-bottom: 23px; }
+    #industry-breakdown .pill-value { background: #f0f5ff; color: #315fae; }
+    #industry-breakdown .action-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px 18px; margin-bottom: 25px; }
+    #industry-breakdown .action { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; }
+    #industry-breakdown .action span { font-size: 11px; color: var(--accent); font-weight: 900; padding-top: 3px; }
+    #industry-breakdown .action p { margin: 0; font-size: 13px; color: #35455b; }
+    #industry-breakdown .value-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    #industry-breakdown .industry-aside { padding: 25px 25px 27px; background: linear-gradient(180deg, #fbfdff, #f7f9fc); }
+    #industry-breakdown .fact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px; margin-bottom: 15px; }
+    #industry-breakdown .fact { background: #fff; border: 1px solid #e5ebf3; border-radius: 13px; padding: 12px 12px 11px; min-height: 135px; }
+    #industry-breakdown .fact b { font-size: 25px; letter-spacing: -.05em; color: var(--accent); margin-right: 4px; }
+    #industry-breakdown .fact > span { font-size: 11px; color: #66758a; }
+    #industry-breakdown .fact strong { display: block; margin-top: 5px; font-size: 12px; }
+    #industry-breakdown .fact small { display: block; color: #79869a; font-size: 10px; line-height: 1.45; margin-top: 5px; }
+    #industry-breakdown .fact-source { font-size: 10px; margin-top: 5px; }
+    #industry-breakdown .model-box { background: #162b49; color: #fff; border-radius: 15px; padding: 17px 18px; }
+    #industry-breakdown .model-box .model-label { color: #9cb4d4; }
+    #industry-breakdown .model-value { font-size: 26px; letter-spacing: -.04em; font-weight: 900; margin: 4px 0; }
+    #industry-breakdown .model-title { font-size: 12px; font-weight: 800; color: #dbe8fb; }
+    #industry-breakdown .model-box p { font-size: 11px; color: #c7d6ea; margin: 9px 0 7px; line-height: 1.55; }
+    #industry-breakdown .model-box small { font-size: 10px; color: #91a6c2; line-height: 1.5; display: block; }
+    #industry-breakdown .source-details { border-top: 1px solid #edf1f5; padding: 13px 30px; }
+    #industry-breakdown .source-details summary { cursor: pointer; color: #607089; font-size: 12px; }
+    #industry-breakdown .source-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 18px; padding-top: 11px; }
+    #industry-breakdown .source-list div { font-size: 11px; overflow-wrap: anywhere; }
+    @media (max-width: 1100px) { #industry-breakdown .industry-layout { grid-template-columns: 1fr; } #industry-breakdown .industry-main { border-right: 0; border-bottom: 1px solid #edf1f5; } }
+    @media (max-width: 680px) { #industry-breakdown .industry-head { padding: 22px 21px 18px; } #industry-breakdown .industry-head h3 { font-size: 22px; } #industry-breakdown .score { min-width: 79px; } #industry-breakdown .industry-main, #industry-breakdown .industry-aside { padding: 21px; } #industry-breakdown .action-list { grid-template-columns: 1fr; } #industry-breakdown .fact-grid { grid-template-columns: 1fr; } #industry-breakdown .source-details { padding: 12px 21px; } #industry-breakdown .source-list { grid-template-columns: 1fr; } }
     .industry-card { border-top-color: var(--success); }
     .benchmark-card { padding: 18px; border: 1px solid var(--line); border-top: 3px solid var(--brand); border-radius: var(--radius); background: var(--surface); }
     .benchmark-card.pending { border-top-color: var(--warning); }
@@ -683,6 +731,32 @@
     .card-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
     .card-note { padding: 9px 10px; border-radius: 5px; background: var(--success-soft); color: var(--success); font-size: 10px; line-height: 1.5; }
     .card-note.risk { background: var(--warning-soft); color: var(--warning); }
+    /* Benchmark cards mirror the source fact-card hierarchy while retaining this page's light palette. */
+    .benchmark-card:not(.industry-card) { position: relative; overflow: hidden; padding: 21px 22px; border: 1px solid #dce5f0; border-radius: 19px; background: #fff; box-shadow: 0 16px 40px rgba(28,52,87,.09); }
+    .benchmark-card:not(.industry-card)::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--card-accent, var(--brand)); }
+    .benchmark-card:not(.industry-card) .card-top { border-bottom: 1px solid #edf1f5; padding-bottom: 13px; margin-bottom: 0; }
+    .benchmark-card:not(.industry-card) .card-top h3 { margin: 4px 0; font-size: 22px; line-height: 1.2; letter-spacing: -.02em; }
+    .benchmark-card:not(.industry-card) .card-kicker { color: var(--card-accent, var(--brand)); font-size: 12px; font-weight: 800; }
+    .benchmark-card:not(.industry-card) .card-top .tag { color: #65748a; background: #f2f4f7; }
+    .benchmark-card:not(.industry-card) .what-box { margin-top: 15px; padding: 15px 16px; border: 1px solid #e3ebf6; border-radius: 12px; background: #f7faff; }
+    .benchmark-card:not(.industry-card) .what-box .data-label, .benchmark-card:not(.industry-card) .audience-box .data-label, .benchmark-card:not(.industry-card) .scene-block .data-label, .benchmark-card:not(.industry-card) .data-block .data-label { margin-bottom: 9px; color: #8592a3; font-size: 10px; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+    .benchmark-card:not(.industry-card) .what-box p { margin: 0; color: #24364f; font-size: 15px; font-weight: 800; line-height: 1.55; }
+    .benchmark-card:not(.industry-card) .audience-box { padding: 13px 0 2px; }
+    .benchmark-card:not(.industry-card) .audience-box p { margin: 0; color: #53637a; font-size: 12px; line-height: 1.55; }
+    .benchmark-card:not(.industry-card) .scene-block { padding: 15px 0 12px; border-bottom: 1px solid #edf1f5; }
+    .benchmark-card:not(.industry-card) .scene-list { display: grid; gap: 8px; }
+    .benchmark-card:not(.industry-card) .scene-item { display: grid; grid-template-columns: 24px 1fr; gap: 8px; align-items: start; }
+    .benchmark-card:not(.industry-card) .scene-item b { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 7px; color: var(--card-accent, var(--brand)); background: color-mix(in srgb, var(--card-accent, var(--brand)) 13%, white); font-size: 10px; }
+    .benchmark-card:not(.industry-card) .scene-item span { color: #3f5067; font-size: 12px; line-height: 1.5; }
+    .benchmark-card:not(.industry-card) .data-block { padding: 15px 0 12px; border-bottom: 1px solid #edf1f5; }
+    .benchmark-card:not(.industry-card) .number-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .benchmark-card:not(.industry-card) .number-item { min-height: 65px; padding: 10px 9px; border: 1px solid #e5ebf3; border-radius: 10px; background: #fbfcfe; }
+    .benchmark-card:not(.industry-card) .number-item strong { display: block; color: var(--card-accent, var(--brand)); font-size: 23px; letter-spacing: -.05em; line-height: 1.1; overflow-wrap: anywhere; }
+    .benchmark-card:not(.industry-card) .number-item span { display: block; margin-top: 4px; color: #596a81; font-size: 10px; line-height: 1.35; }
+    .benchmark-card:not(.industry-card) .data-source { margin-top: 8px; font-size: 10px; }
+    .benchmark-card:not(.industry-card) .data-source a, .benchmark-card:not(.industry-card) .card-links a { color: var(--card-accent, var(--brand-dark)); }
+    .benchmark-card:not(.industry-card) .card-links { margin-top: 13px; font-size: 11px; }
+    @media (max-width: 700px) { .benchmark-card:not(.industry-card) .number-grid { grid-template-columns: repeat(2, 1fr); } .benchmark-card:not(.industry-card) .number-item strong { font-size: 21px; } .benchmark-card:not(.industry-card) .what-box p { font-size: 14px; } }
     .heat-table table { min-width: 840px; }
     .heat-table th:not(:first-child), .heat-table td:not(:first-child) { text-align: center; }
     .heat { display: inline-grid; place-items: center; width: 28px; height: 22px; border-radius: 4px; color: var(--brand-dark); background: var(--brand-soft); font-size: 10px; font-weight: 600; }
@@ -764,16 +838,21 @@
     /* 完整原稿嵌入 */
     .toc-group { margin: 18px 0 8px; color: var(--muted); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
     .toc-group:first-of-type { margin-top: 0; }
-    .research-source { padding-top: 28px; }
-    .source-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 14px; }
+    .research-source { padding-top: 46px; }
+    .section-group-heading { margin: 52px 0 24px; padding-top: 26px; border-top: 1px solid var(--line); color: var(--brand); font-size: 32px; font-weight: 800; line-height: 1.25; }
+    .section-group-heading + .section { padding-top: 46px; }
+    #benchmarks .section-head, #positioning .section-head, #industry-coverage .section-head { margin-bottom: 26px; }
+    #positioning .plot-wrap { margin-top: 20px; }
+    .source-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; margin-bottom: 22px; }
     .source-header h2 { margin: 4px 0 0; }
-    .source-header p { margin: 7px 0 0; color: var(--muted); font-size: 12px; }
+    #user-scenarios .source-header h2 { color: var(--brand); font-size: 32px; font-weight: 800; line-height: 1.25; }
+    .source-header p { margin: 12px 0 0; color: var(--muted); font-size: 12px; }
     .source-badge { flex: 0 0 auto; padding: 6px 9px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface-2); color: var(--brand-dark); font-size: 11px; font-weight: 700; }
     .research-content { min-height: 180px; }
     .research-loading { padding: 28px 0; color: var(--muted); font-size: 12px; }
     .research-error { padding: 18px; border: 1px solid var(--danger-soft); border-radius: var(--radius); background: var(--danger-soft); color: var(--danger); font-size: 12px; }
     /* 保留旧摘要代码以便追溯，但页面只展示两份完整原稿。 */
-    #knowledge-map, #industry-opportunity, #industry-breakdown,
+    #knowledge-map, #industry-opportunity,
     #tasks, #capability, #moat, #commercial, #cloud, #overseas, #validation,
     #overseas-industry, #overseas-opportunity { display: none; }
     .fusion-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -799,10 +878,22 @@
       <div class="brand"><div class="brand-mark">AG</div><div><strong>垂直 Agent 研究</strong><small>标杆 · 场景 · 行业机会</small></div></div>
       <div class="nav-label">报告目录</div>
       <nav class="toc" id="toc">
-        <a class="active" href="#user-scenarios"><span class="toc-num">01</span><span class="toc-label">用户场景需求研究</span></a>
-        <a href="#benchmarks"><span class="toc-num">02</span><span class="toc-label">行业 Agent 标杆产品</span></a>
-        <a href="#positioning"><span class="toc-num">03</span><span class="toc-label">Agent 产品场景能力分析</span></a>
-        <a href="#industry-coverage"><span class="toc-num">04</span><span class="toc-label">agent 产品行业覆盖范围</span></a>
+        <div class="toc-primary"><span class="toc-num">一、</span><span class="toc-label">用户场景需求研究</span></div>
+        <div class="toc-subgroup">
+          <a href="#user-scenarios" data-research-target="part1"><span class="toc-num">01.1</span><span class="toc-label">依赖知识 / 文件的工作</span></a>
+          <a href="#user-scenarios" data-research-target="part2"><span class="toc-num">01.2</span><span class="toc-label">人工信息处理密集型工作</span></a>
+          <a href="#user-scenarios" data-research-target="focus"><span class="toc-num">01.3</span><span class="toc-label">人工处理重点工作</span></a>
+          <a href="#user-scenarios" data-research-target="matrix"><span class="toc-num">01.4</span><span class="toc-label">知识依赖与人工处理二维聚焦</span></a>
+          <a href="#user-scenarios" data-research-target="scenes"><span class="toc-num">01.5</span><span class="toc-label">重点场景机会卡</span></a>
+          <a href="#user-scenarios" data-research-target="agentmap"><span class="toc-num">01.6</span><span class="toc-label">Agent 场景机会地图</span></a>
+        </div>
+        <div class="toc-group-label">二、行业场景需求研究</div>
+        <div class="toc-subgroup">
+          <a href="#benchmarks"><span class="toc-num">02.1</span><span class="toc-label">行业 Agent 标杆产品</span></a>
+          <a href="#industry-coverage"><span class="toc-num">02.2</span><span class="toc-label">Agent 产品行业覆盖范围</span></a>
+          <a href="#positioning"><span class="toc-num">02.3</span><span class="toc-label">Agent 产品场景能力分析</span></a>
+          <a href="#industry-breakdown"><span class="toc-num">02.4</span><span class="toc-label">逐行业拆解：规模、AI 作为与商业化空间</span></a>
+        </div>
       </nav>
       <div class="sidebar-note">国内与海外研究融合稿<br>事实、模型测算与研究判断分层。</div>
     </aside>
@@ -826,15 +917,17 @@
 
         <section class="section research-source" id="user-scenarios">
           <div class="section-head source-header">
-            <div><h2>01-用户场景需求研究</h2><p>从高知识 / 文件依赖工作出发，梳理人工信息处理最重的岗位、任务与 Agent 机会场景。</p></div>
+            <div><h2>一、用户场景需求研究</h2><p>从高知识 / 文件依赖工作出发，梳理人工信息处理最重的岗位、任务与 Agent 机会场景。</p></div>
           </div>
           <div class="research-content" id="research-content" data-source="行业需求横扫.html">
             <div class="research-loading">正在加载用户场景需求研究…</div>
           </div>
         </section>
 
+        <div class="section-group-heading">二、行业场景需求研究</div>
+
 <section class="section" id="benchmarks">
-          <div class="section-head"><div><h2>02-行业Agent标杆产品</h2><p class="section-intro">汇总国内与海外行业 Agent 产品，比较其行业对象、核心任务、业务闭环与商业化信号。</p></div><div class="benchmark-tools"><div class="benchmark-switch" role="tablist" aria-label="行业 Agent 标杆产品范围"><button class="benchmark-switch-btn active" type="button" data-benchmark-tab="overseas" role="tab" aria-selected="true">海外</button><button class="benchmark-switch-btn" type="button" data-benchmark-tab="domestic" role="tab" aria-selected="false">国内</button></div></div></div>
+          <div class="section-head"><div><h2>02.1 行业 Agent 标杆产品</h2><p class="section-intro">汇总国内与海外行业 Agent 产品，比较其行业对象、核心任务、业务闭环与商业化信号。</p></div><div class="benchmark-tools"><div class="benchmark-switch" role="tablist" aria-label="行业 Agent 标杆产品范围"><button class="benchmark-switch-btn active" type="button" data-benchmark-tab="overseas" role="tab" aria-selected="true">海外</button><button class="benchmark-switch-btn" type="button" data-benchmark-tab="domestic" role="tab" aria-selected="false">国内</button></div></div></div>
           <div class="benchmark-panels">
           <div class="benchmark-panel" data-benchmark-panel="domestic" hidden>
           <div class="benchmark-grid">
@@ -861,25 +954,10 @@
             <article class="benchmark-card"><div class="card-top"><div><span class="card-kicker">CRM · 销售执行 Agent</span><h3><a href="https://www.salesforce.com/agentforce/" target="_blank" rel="noreferrer">Salesforce Agentforce</a></h3></div><span class="tag green">F3</span></div><div class="card-metrics"><div class="card-metric"><b>CRM 基盘</b><span>客户与商机</span></div><div class="card-metric"><b>可执行</b><span>销售 / 服务动作</span></div><div class="card-metric"><b>平台增购</b><span>生态商业化</span></div></div><div class="card-line"><b>用户</b><span>销售、客服、营销、客户成功</span></div><div class="card-line"><b>任务</b><span>客户洞察 → 推荐 → 创建任务 → 更新 CRM</span></div><div class="card-bottom"><div class="card-note">强：业务对象、权限和动作完整</div><div class="card-note risk">弱：实施与数据治理成本高</div></div></article>
           </div>
           </div>
-          <div class="industry-subsection" id="industry-breakdown">
-            <div class="section-head"><div><h2>02-逐行业拆解：规模、AI 作用与商业化空间</h2><p class="section-intro">把行业机会转换成与 Agent 产品卡片一致的判断单元，便于比较任务、价值和商业空间。</p></div></div>
-            <div class="benchmark-grid">
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">金融 · 研究与合规</span><h3>金融、银行、保险与资管</h3></div><span class="tag green">P0</span></div><div class="card-metrics"><div class="card-metric"><b>高规模</b><span>预算集中</span></div><div class="card-metric"><b>证据核验</b><span>AI 作用</span></div><div class="card-metric"><b>高客单价</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Hebbia、Box AI、Glean</span></div><div class="card-line"><b>任务</b><span>研究、尽调、核保理赔、合规审查与文档生成</span></div><div class="card-bottom"><div class="card-note">价值：缩短每案处理时间，提升引用覆盖率</div><div class="card-note risk">约束：敏感权限、审计和责任边界</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">制造 · 工程与质量</span><h3>制造与工业</h3></div><span class="tag green">P0</span></div><div class="card-metrics"><div class="card-metric"><b>大体量</b><span>文件密集</span></div><div class="card-metric"><b>SOP + 工单</b><span>AI 作用</span></div><div class="card-metric"><b>项目制</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Siemens Industrial Copilot、Guru、Box AI</span></div><div class="card-line"><b>任务</b><span>SOP 问答、工程变更、质量追溯、供应链与设备异常</span></div><div class="card-bottom"><div class="card-note">价值：减少找资料时间与变更遗漏</div><div class="card-note risk">约束：设备异构、现场权限和实施周期</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">医疗 · 生命科学</span><h3>医疗健康与生命科学</h3></div><span class="tag">P1</span></div><div class="card-metrics"><div class="card-metric"><b>高预算</b><span>合规驱动</span></div><div class="card-metric"><b>文档 QA</b><span>AI 作用</span></div><div class="card-metric"><b>高价值</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Glean、Box AI、Abridge</span></div><div class="card-line"><b>任务</b><span>注册资料、QA、临床研究、合规知识与文书整理</span></div><div class="card-bottom"><div class="card-note">价值：提高材料完整率和审计准备效率</div><div class="card-note risk">约束：隐私、私有化和诊疗责任</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">零售 · 消费与电商</span><h3>零售、消费与电商</h3></div><span class="tag">P1</span></div><div class="card-metrics"><div class="card-metric"><b>规模大</b><span>多门店 / 多商品</span></div><div class="card-metric"><b>内容分发</b><span>AI 作用</span></div><div class="card-metric"><b>横向增购</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Glean、Box AI、Guru</span></div><div class="card-line"><b>任务</b><span>商品、门店、客服、营销资料的检索、生成与分发</span></div><div class="card-bottom"><div class="card-note">价值：把总部知识转成一线动作</div><div class="card-note risk">约束：门店数据分散，需绑定运营 KPI</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">教育 · 培训与高校</span><h3>教育、培训与高校</h3></div><span class="tag">P1</span></div><div class="card-metrics"><div class="card-metric"><b>中规模</b><span>机构分散</span></div><div class="card-metric"><b>研究学习</b><span>AI 作用</span></div><div class="card-metric"><b>易试点</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>NotebookLM、Glean、Sana</span></div><div class="card-line"><b>任务</b><span>指定资料学习、课程生成、研究综述与教学支持</span></div><div class="card-bottom"><div class="card-note">价值：降低整理成本，提高课程与研究复用</div><div class="card-note risk">约束：版权、机构权限和预算敏感</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">软件 · 互联网与 IT 服务</span><h3>软件、互联网与 IT 服务</h3></div><span class="tag green">P0</span></div><div class="card-metrics"><div class="card-metric"><b>高密度</b><span>知识更新快</span></div><div class="card-metric"><b>搜索 + 工单</b><span>AI 作用</span></div><div class="card-metric"><b>平台增购</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Glean、Sana、Box AI</span></div><div class="card-line"><b>任务</b><span>研发文档、客服、自助 IT、销售资料与工单分流</span></div><div class="card-bottom"><div class="card-note">价值：提高自助解决率和搜索成功率</div><div class="card-note risk">约束：连接器、权限继承和可观测性</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">专业服务 · 研究与交付</span><h3>科研、咨询、投研与专业服务</h3></div><span class="tag green">P0</span></div><div class="card-metrics"><div class="card-metric"><b>高客单价</b><span>专家密集</span></div><div class="card-metric"><b>证据化研究</b><span>AI 作用</span></div><div class="card-metric"><b>项目收费</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Hebbia、NotebookLM、Harvey</span></div><div class="card-line"><b>任务</b><span>研究 memo、竞品比较、尽调、综述与方案初稿</span></div><div class="card-bottom"><div class="card-note">价值：缩短资料到初稿时间，提高项目续费</div><div class="card-note risk">约束：来源质量、引用漏失与专业复核</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">建筑 · 工程与项目制</span><h3>建筑、工程与项目制业务</h3></div><span class="tag green">P0</span></div><div class="card-metrics"><div class="card-metric"><b>大文件</b><span>项目周期长</span></div><div class="card-metric"><b>证据链</b><span>AI 作用</span></div><div class="card-metric"><b>合同增值</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Box AI、Guru、Glean</span></div><div class="card-line"><b>任务</b><span>投标、变更、签证、纪要、结算与交付证据整理</span></div><div class="card-bottom"><div class="card-note">价值：提升响应速度和证据完整率</div><div class="card-note risk">约束：图纸 / OCR、项目权限与弱网</div></div></article>
-              <article class="benchmark-card industry-card"><div class="card-top"><div><span class="card-kicker">HR · 组织运营</span><h3>人力资源与组织运营</h3></div><span class="tag">P1</span></div><div class="card-metrics"><div class="card-metric"><b>横向规模</b><span>全员触达</span></div><div class="card-metric"><b>制度问答</b><span>AI 作用</span></div><div class="card-metric"><b>低风险</b><span>商业空间</span></div></div><div class="card-line"><b>代表 Agent</b><span>Sana、Guru、Glean</span></div><div class="card-line"><b>任务</b><span>制度问答、培训、服务台、招聘与入职支持</span></div><div class="card-bottom"><div class="card-note">价值：提升自助解决率，缩短新人上手</div><div class="card-note risk">约束：数据敏感，需从低风险入口切入</div></div></article>
-            </div>
-          </div>
-          </div>
         </section>
 
         <section class="section" id="positioning">
-          <div class="section-head"><div><h2>03- Agent 产品场景能力分析</h2><p class="section-intro">看“场景专业化”与“执行深度”。</p></div></div>
+          <div class="section-head"><div><h2>02.3 Agent 产品场景能力分析</h2><p class="section-intro">看“场景专业化”与“执行深度”。</p></div></div>
           <div class="plot-wrap">
             <div class="plot positioning-plot" role="img" aria-label="国内与海外行业 Agent 竞品定位象限图">
               <span class="quadrant q1">专业执行</span><span class="quadrant q2">专业研究 / 工作台</span><span class="quadrant q3">通用知识助手</span><span class="quadrant q4">业务 Copilot</span>
@@ -925,8 +1003,120 @@
           </div>
         </section>
 
+
+        <section class="section industry-breakdown-section" id="industry-breakdown"><div class="shell"><div class="section-head"><div><div class="eyebrow">02.4 · 行业机会拆解</div><h2>02.4 逐行业拆解：规模、AI 作为与商业化空间</h2><p>按研究优先级排序：先看 P0，再看 P1；同一优先级内按研究评分从高到低排列。</p></div></div><div class="industry-stack"><article class="industry-card" id="finance" style="--accent:#7c3aed">
+    <div class="industry-head"><div><div class="eyebrow">P0 · 中国行业机会</div><h3>金融、银行、保险与资管</h3><p>高价值文档密集、合规约束强，最适合“知识底座 + 研究 / 审批 Agent”</p></div><div class="score"><strong>96</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Glean</span><span class="pill pill-core">Sana Agents</span><span class="pill pill-core">Hebbia</span><span class="pill pill-core">Box AI Agents</span></div><div class="pill-row support-row"><span class="pill pill-support">Harvey</span><span class="pill pill-support">Guru</span><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>投研：把公告、研报、访谈纪要、财报变成带引用的研究 brief</p></div><div class="action"><span>02</span><p>授信 / 风控：批量抽取财务指标、担保条款、风险信号，生成审批底稿</p></div><div class="action"><span>03</span><p>保险：保单、理赔、核保规则问答与材料完整性检查</p></div><div class="action"><span>04</span><p>合规：监管变化 → 受影响制度 → 待办清单 → 证据留痕</p></div><div class="action"><span>05</span><p>投行 / PE：DDQ、尽调、交易文件、投资委员会材料协同</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">减少研究与材料准备时间</span><span class="pill pill-value">提升合规可追溯性</span><span class="pill pill-value">缩短授信 / 核保 / 交易周期</span><span class="pill pill-value">把专家经验固化成机构知识</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>9.70</b><span>万亿元</span><strong>金融业增加值</strong><small>2024 年最终核实 · GDP 行业增加值，不是金融科技市场规模</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>495.59</b><span>万亿元</span><strong>金融机构总资产</strong><small>2024 年末 · 业务复杂度与预算底盘，不直接等于软件 TAM</small><div class="fact-source"><a href="https://jrj.sh.gov.cn/SCGK194/20250321/86e4bc854cc24d579bde16b0376943ba.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>444.57 / 15.11 / 35.91</b><span>万亿元</span><strong>银行 / 证券 / 保险资产</strong><small>2024 年末 · 上海金融办披露的全国口径资产结构</small><div class="fact-source"><a href="https://jrj.sh.gov.cn/SCGK194/20250321/86e4bc854cc24d579bde16b0376943ba.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">50–500 万元 / 大型机构 / 年</div><div class="model-title">机构合同空间（情景模型）</div><p>假设：知识检索、文档处理、合规 Agent 按机构或业务线签约；不是公开市场规模</p><small>适合从总行、券商投行、保险核保/理赔、资管投研四类预算池切入。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（6）</summary><div class="source-list"><div>01 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>02 <a href="https://jrj.sh.gov.cn/SCGK194/20250321/86e4bc854cc24d579bde16b0376943ba.html" target="_blank" rel="noopener">jrj.sh.gov.cn ↗</a></div><div>03 <a href="https://www.glean.com/solutions/industries/financial-services" target="_blank" rel="noopener">www.glean.com ↗</a></div><div>04 <a href="https://sanalabs.com/products/sana/solutions/industries/financial-services" target="_blank" rel="noopener">sanalabs.com ↗</a></div><div>05 <a href="https://www.box.com/industries/financial-services/" target="_blank" rel="noopener">www.box.com ↗</a></div><div>06 <a href="https://www.hebbia.com/" target="_blank" rel="noopener">www.hebbia.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="legal" style="--accent:#dc2626">
+    <div class="industry-head"><div><div class="eyebrow">P0 · 中国行业机会</div><h3>法律与合规</h3><p>高价值专业人员 + 高风险文档 + 强引用要求，是最典型的“知识库 + 垂直 Agent”行业</p></div><div class="score"><strong>95</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Harvey</span><span class="pill pill-core">Hebbia</span></div><div class="pill-row support-row"><span class="pill pill-support">Glean</span><span class="pill pill-support">Box AI Agents</span><span class="pill pill-support">Guru</span><span class="pill pill-support">Sana Agents</span><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>合同审查：从合同库中识别非标准条款、义务、期限和风险，生成修改建议</p></div><div class="action"><span>02</span><p>并购尽调：批量阅读合同、披露文件和问卷，输出风险矩阵与问题清单</p></div><div class="action"><span>03</span><p>合规管理：监管 / 法规变化 → 受影响制度 → 责任人 → 待办与证据链</p></div><div class="action"><span>04</span><p>争议与诉讼：汇总案件材料、时间线、证据和历史文书，生成 matter 摘要</p></div><div class="action"><span>05</span><p>企业法务：基于模板、历史意见和公司制度回答业务问题，并保留引用来源</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">减少律师和法务的重复阅读时间</span><span class="pill pill-value">降低漏审、漏引和版本错误</span><span class="pill pill-value">提高尽调、合同和合规交付速度</span><span class="pill pill-value">把资深律师经验沉淀为组织知识</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>83</b><span>万人</span><strong>律师人数</strong><small>截至 2025 年公开发布会 · 全国律师规模，不等于 AI 产品可售席位</small><div class="fact-source"><a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2025nsfbfbh/202509gzlwcsswgh/202509gzlwcsswgh_wzzb/index.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>4.5</b><span>万家</span><strong>律师事务所</strong><small>截至 2025 年公开发布会 · 律所数量，不等于当前产品客户数</small><div class="fact-source"><a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2025nsfbfbh/202509gzlwcsswgh/202509gzlwcsswgh_wzzb/index.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>1,500+</b><span>万件</span><strong>年度诉讼 / 非诉事务</strong><small>截至 2025 年公开发布会 · 法律服务工作量代理指标</small><div class="fact-source"><a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2025nsfbfbh/202509gzlwcsswgh/202509gzlwcsswgh_wzzb/index.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">25–83 亿元 / 年</div><div class="model-title">法律席位空间（情景模型）</div><p>83 万律师 × ¥3,000–10,000 / 席 / 年；仅为席位情景，不是法律 AI 市场规模</p><small>不包含企业内部非律师法务人员、律所实施服务和按项目收费空间。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://www.moj.gov.cn/pub/sfbgw/sfbxwfbhzb/2025nsfbfbh/202509gzlwcsswgh/202509gzlwcsswgh_wzzb/index.html" target="_blank" rel="noopener">www.moj.gov.cn ↗</a></div><div>02 <a href="https://www.harvey.ai/blog/legal-operations-management" target="_blank" rel="noopener">www.harvey.ai ↗</a></div><div>03 <a href="https://www.hebbia.com/solutions/legal" target="_blank" rel="noopener">www.hebbia.com ↗</a></div><div>04 <a href="https://www.box.com/agents" target="_blank" rel="noopener">www.box.com ↗</a></div><div>05 <a href="https://www.fangcloud.com/cms/solution/" target="_blank" rel="noopener">www.fangcloud.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="manufacturing" style="--accent:#0f766e">
+    <div class="industry-head"><div><div class="eyebrow">P0 · 中国行业机会</div><h3>制造与工业</h3><p>内容、SOP、工程变更和供应链资料高密度，适合从“可复用知识 + 现场问答”切入</p></div><div class="score"><strong>94</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Glean</span><span class="pill pill-core">Sana Agents</span><span class="pill pill-core">Guru</span><span class="pill pill-core">Box AI Agents</span><span class="pill pill-core">亿方云</span></div><div class="pill-row support-row"><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">Hebbia</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>工程：图纸 / 规格书 / 变更单 / 会议纪要 → 影响分析与任务分派</p></div><div class="action"><span>02</span><p>质量：检验标准、8D、客诉、审计记录 → 根因检索与整改闭环</p></div><div class="action"><span>03</span><p>供应链：供应商资质、报价、交付、替代料 → 采购决策 brief</p></div><div class="action"><span>04</span><p>现场：设备手册、维修记录、SOP → 一线员工手机问答</p></div><div class="action"><span>05</span><p>培训：把专家经验、工艺、安规和岗位课程做成可验证知识</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">减少“找文件、问专家、等确认”</span><span class="pill pill-value">降低质量与安全操作风险</span><span class="pill pill-value">提高跨工厂复制效率</span><span class="pill pill-value">沉淀工程与工艺知识资产</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>33.49</b><span>万亿元</span><strong>制造业增加值</strong><small>2024 年最终核实 · 制造业增加值，占最终核实 GDP 约 24.8%</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>10.80</b><span>万元 / 人 / 年</span><strong>制造业城镇非私营单位平均工资</strong><small>2024 年 · 用于判断节省工程、质量、采购人员时间的价值密度</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202505/t20250516_1959826.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">33–167 亿元 / 年</div><div class="model-title">内容 / 知识软件投入情景</div><p>制造业增加值 ¥33.49 万亿元 × 0.01%–0.05%；仅为投入份额情景，不是公开 TAM</p><small>真正可售空间取决于企业规模、部署方式、知识敏感等级与是否连接 MES/PLM/ERP。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（6）</summary><div class="source-list"><div>01 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>02 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202505/t20250516_1959826.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>03 <a href="https://www.getguru.com/solutions/manufacturing" target="_blank" rel="noopener">www.getguru.com ↗</a></div><div>04 <a href="https://sanalabs.com/agent-platform-solutions" target="_blank" rel="noopener">sanalabs.com ↗</a></div><div>05 <a href="https://www.box.com/industries" target="_blank" rel="noopener">www.box.com ↗</a></div><div>06 <a href="https://www.fangcloud.com/cms/solution/" target="_blank" rel="noopener">www.fangcloud.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="research" style="--accent:#9333ea">
+    <div class="industry-head"><div><div class="eyebrow">P0 · 中国行业机会</div><h3>科研、咨询、投研与专业服务</h3><p>复杂文档、跨来源研究和高价专业人员共同构成 Hebbia / NotebookLM / Harvey 的高价值场景</p></div><div class="score"><strong>93</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Hebbia</span><span class="pill pill-core">NotebookLM</span><span class="pill pill-core">Harvey</span><span class="pill pill-core">Glean</span></div><div class="pill-row support-row"><span class="pill pill-support">Sana Agents</span><span class="pill pill-support">Guru</span><span class="pill pill-support">Box AI Agents</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>投研：财报、公告、访谈、行业数据 → 可追溯研究 memo 与比较表</p></div><div class="action"><span>02</span><p>咨询：访谈纪要、交付模板、客户资料 → 假设验证与交付初稿</p></div><div class="action"><span>03</span><p>M&amp;A / 尽调：大量合同、财务、运营文件 → 风险、条款和协同机会矩阵</p></div><div class="action"><span>04</span><p>科研：论文、基金指南、实验记录 → 综述、研究空白与申请材料</p></div><div class="action"><span>05</span><p>专业服务：企业知识库 → 资深专家方法论复用与新人成长</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">提高高价专业人员的产出密度</span><span class="pill pill-value">缩短从资料到结论的周期</span><span class="pill pill-value">降低漏读、漏引和版本混乱</span><span class="pill pill-value">把项目资产沉淀为组织可复用知识</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>3.63</b><span>万亿元</span><strong>全国 R&amp;D 经费支出</strong><small>2024 年 · 基础研究 0.25 万亿元，应用研究 0.43 万亿元，试验发展 2.95 万亿元</small><div class="fact-source"><a href="https://app.www.gov.cn/govdata/gov/202509/29/537665/article.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>5.69</b><span>万亿元</span><strong>租赁和商务服务业增加值</strong><small>2024 年最终核实 · 咨询、商务服务等相邻行业的宏观底盘</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">36–182 亿元 / 年</div><div class="model-title">研究知识工具投入情景</div><p>R&amp;D 经费 ¥3.63 万亿元 × 0.1%–0.5%；比例是假设，不是研究工具市场规模</p><small>该类产品最容易以“项目 / 交易 / 课题”作为付费单位，随后扩展到部门知识库与企业 Agent。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://app.www.gov.cn/govdata/gov/202509/29/537665/article.html" target="_blank" rel="noopener">app.www.gov.cn ↗</a></div><div>02 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>03 <a href="https://www.hebbia.com/" target="_blank" rel="noopener">www.hebbia.com ↗</a></div><div>04 <a href="https://blog.google/innovation-and-ai/models-and-research/google-labs/notebooklm-student-features/" target="_blank" rel="noopener">blog.google ↗</a></div><div>05 <a href="https://www.harvey.ai/blog/legal-operations-management" target="_blank" rel="noopener">www.harvey.ai ↗</a></div></div></details>
+  </article><article class="industry-card" id="health" style="--accent:#0284c7">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>医疗健康与生命科学</h3><p>高合规、高文档密度、高人工成本，价值不在诊断，而在证据、流程和知识服务</p></div><div class="score"><strong>91</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Glean</span><span class="pill pill-core">Box AI Agents</span><span class="pill pill-core">Sana Agents</span><span class="pill pill-core">Guru</span></div><div class="pill-row support-row"><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">Harvey</span><span class="pill pill-support">Hebbia</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>医院 / 药企：指南、SOP、质量体系、注册资料和研究资料问答</p></div><div class="action"><span>02</span><p>临床研究：方案、研究中心、受试者、监查和 eTMF 材料整理</p></div><div class="action"><span>03</span><p>保险 / 支付：理赔材料、条款、申诉与会员服务知识助手</p></div><div class="action"><span>04</span><p>药企合规：法规变化、质量事件、审计准备和 CAPA 证据链</p></div><div class="action"><span>05</span><p>员工服务：入职、培训、岗位资质、院感 / 安全制度问答</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">缩短行政和材料处理时间</span><span class="pill pill-value">提高审计、注册、质控准备度</span><span class="pill pill-value">减少知识断层与误操作</span><span class="pill pill-value">让专家经验可复用但保持权限边界</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>9.09</b><span>万亿元</span><strong>全国卫生总费用</strong><small>2024 年 · 占 GDP 6.7%</small><div class="fact-source"><a href="https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee.shtml" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>1,578</b><span>万人</span><strong>卫生人员总数</strong><small>2024 年末 · 知识工作者与行政流程的潜在用户底盘</small><div class="fact-source"><a href="https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee.shtml" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>1,302</b><span>万人</span><strong>医疗卫生技术人员</strong><small>2024 年末 · 不等于可直接购买 AI 软件的席位数</small><div class="fact-source"><a href="https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee.shtml" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">16–95 亿元 / 年</div><div class="model-title">知识岗位席位情景</div><p>卫生人员 1,578 万 × 10%–20% 目标知识岗位 × ¥1,000–3,000 / 席 / 年；目标比例与价格为假设</p><small>高价值切口优先选药企注册 / QA、医院行政与科研、保险理赔，而不是面向所有医护泛化售卖。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://www.nhc.gov.cn/guihuaxxs/c100133/202512/f1c3a3c617484a27a1a26a468afbaeee.shtml" target="_blank" rel="noopener">www.nhc.gov.cn ↗</a></div><div>02 <a href="https://www.glean.com/solutions/industries/healthcare" target="_blank" rel="noopener">www.glean.com ↗</a></div><div>03 <a href="https://www.box.com/en-gb/industries/life-sciences-biotech" target="_blank" rel="noopener">www.box.com ↗</a></div><div>04 <a href="https://www.getguru.com/customers/global-healthcare-company" target="_blank" rel="noopener">www.getguru.com ↗</a></div><div>05 <a href="https://sanalabs.com/agent-platform-solutions" target="_blank" rel="noopener">sanalabs.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="construction" style="--accent:#b45309">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>建筑、工程与项目制业务</h3><p>项目资料跨组织流动、变更频繁、现场和总部存在信息断层，内容 Agent 可直接连接项目交付</p></div><div class="score"><strong>90</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Box AI Agents</span><span class="pill pill-core">Guru</span><span class="pill pill-core">亿方云</span></div><div class="pill-row support-row"><span class="pill pill-support">Glean</span><span class="pill pill-support">Sana Agents</span><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">Harvey</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>投标：招标文件、清单、历史项目 → 资格审查、风险点和投标策略</p></div><div class="action"><span>02</span><p>项目交付：合同、图纸、变更、签证、会议纪要 → 责任与进度追踪</p></div><div class="action"><span>03</span><p>现场：安全规范、施工方案、设备手册 → 一线问答与检查清单</p></div><div class="action"><span>04</span><p>结算：合同条款、签证和影像资料 → 证据索引与争议准备</p></div><div class="action"><span>05</span><p>交付后：竣工资料、维保手册、故障记录 → 客户服务与资产运营</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">减少项目经理和工程师找资料时间</span><span class="pill pill-value">降低合同 / 变更 / 结算证据缺失</span><span class="pill pill-value">提高多项目复制和总部管控能力</span><span class="pill pill-value">让纸面知识进入现场动作</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>32.65</b><span>万亿元</span><strong>建筑业总产值</strong><small>2024 年 · 总产值口径，不与建筑业增加值混用</small><div class="fact-source"><a href="https://www.stats.gov.cn/sj/zxfb/202501/t20250117_1958332.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>8.89</b><span>万亿元</span><strong>建筑业增加值</strong><small>2024 年最终核实 · GDP 行业增加值口径</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">33–163 亿元 / 年</div><div class="model-title">工程内容层投入情景</div><p>建筑业总产值 ¥32.65 万亿元 × 0.01%–0.05%；比例是假设，不是建筑软件市场规模</p><small>落地要优先支持超大文件、图纸 / OCR、项目权限、离线 / 弱网和私有化部署。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://www.stats.gov.cn/sj/zxfb/202501/t20250117_1958332.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>02 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202512/t20251226_1962144.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>03 <a href="https://www.box.com/industries" target="_blank" rel="noopener">www.box.com ↗</a></div><div>04 <a href="https://www.getguru.com/solutions" target="_blank" rel="noopener">www.getguru.com ↗</a></div><div>05 <a href="https://www.fangcloud.com/cms/solution/" target="_blank" rel="noopener">www.fangcloud.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="software" style="--accent:#4f46e5">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>软件、互联网与 IT 服务</h3><p>连接器和权限能力最容易产品化，企业内部搜索、研发文档、客服与销售是天然入口</p></div><div class="score"><strong>88</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Glean</span><span class="pill pill-core">Guru</span><span class="pill pill-core">Sana Agents</span><span class="pill pill-core">Box AI Agents</span></div><div class="pill-row support-row"><span class="pill pill-support">Hebbia</span><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>研发：代码、架构、故障记录、RFC → 诊断、影响分析和新成员 onboarding</p></div><div class="action"><span>02</span><p>IT 运维：runbook、资产、权限与历史工单 → 自助排障和变更辅助</p></div><div class="action"><span>03</span><p>销售：产品文档、竞品、客户历史 → RFP、方案和会议准备</p></div><div class="action"><span>04</span><p>客服：产品知识、已解决工单 → 受控回答、升级判断与知识回写</p></div><div class="action"><span>05</span><p>产品：用户反馈、研究、需求和版本记录 → 机会聚类与决策 brief</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">减少跨系统检索与重复问答</span><span class="pill pill-value">缩短交付和排障时间</span><span class="pill pill-value">提高知识回写与复用率</span><span class="pill pill-value">让权限和审计成为平台差异点</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>13.73</b><span>万亿元</span><strong>软件业务收入</strong><small>2024 年 · 软件业与信息技术服务业统计口径</small><div class="fact-source"><a href="https://www.miit.gov.cn/gxsj/tjfx/rjy/art/2025/art_fc4217954bc4415690ae61c6c7802d2d.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>1.41</b><span>万亿元</span><strong>云计算与大数据服务收入</strong><small>2024 年 · AI 基础设施与企业知识应用的相邻底盘</small><div class="fact-source"><a href="https://www.miit.gov.cn/gxsj/tjfx/rjy/art/2025/art_fc4217954bc4415690ae61c6c7802d2d.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>9.22</b><span>万亿元</span><strong>信息技术服务收入</strong><small>2024 年 · 包含 IT 服务等，不等于 Agent 市场规模</small><div class="fact-source"><a href="https://www.miit.gov.cn/gxsj/tjfx/rjy/art/2025/art_fc4217954bc4415690ae61c6c7802d2d.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">27–69 亿元 / 年</div><div class="model-title">软件企业知识层投入情景</div><p>软件业务收入 ¥13.73 万亿元 × 0.02%–0.05%；投入比例是假设，不是市场规模</p><small>对亿方云的直接启示是：连接器、权限继承、知识治理和可观测性比“又一个聊天框”更值得优先做深。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://www.miit.gov.cn/gxsj/tjfx/rjy/art/2025/art_fc4217954bc4415690ae61c6c7802d2d.html" target="_blank" rel="noopener">www.miit.gov.cn ↗</a></div><div>02 <a href="https://www.glean.com/ai-agents/agent-builder" target="_blank" rel="noopener">www.glean.com ↗</a></div><div>03 <a href="https://help.getguru.com/docs/intro-to-knowledge-agents" target="_blank" rel="noopener">help.getguru.com ↗</a></div><div>04 <a href="https://www.box.com/agents" target="_blank" rel="noopener">www.box.com ↗</a></div><div>05 <a href="https://sanalabs.com/agent-platform-solutions" target="_blank" rel="noopener">sanalabs.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="retail" style="--accent:#ea580c">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>零售、消费与电商</h3><p>门店、客服、商品和营销资料分散，Agent 的价值是让总部知识进入一线与业务动作</p></div><div class="score"><strong>86</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Glean</span><span class="pill pill-core">Box AI Agents</span><span class="pill pill-core">Guru</span><span class="pill pill-core">Sana Agents</span></div><div class="pill-row support-row"><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>门店：商品、促销、退换货、会员政策和安全制度即时问答</p></div><div class="action"><span>02</span><p>客服：从知识库生成带依据的客服建议，升级复杂问题</p></div><div class="action"><span>03</span><p>商品 / 供应链：规格、供应商、上新、库存与活动资料对齐</p></div><div class="action"><span>04</span><p>营销：把产品资料、历史 campaign 和用户洞察转成 brief</p></div><div class="action"><span>05</span><p>零售培训：旺季临时员工 onboarding 与门店 SOP 复用</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">降低一线培训与问答成本</span><span class="pill pill-value">提高客服一次解决率</span><span class="pill pill-value">加快新品和活动上线</span><span class="pill pill-value">减少政策、价格和合规信息错用</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>48.79</b><span>万亿元</span><strong>社会消费品零售总额</strong><small>2024 年 · 消费规模底盘，不是零售软件市场规模</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202501/t20250117_1958327.html" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>15.52</b><span>万亿元</span><strong>网上零售额</strong><small>2024 年 · 其中实物商品网上零售额 13.08 万亿元</small><div class="fact-source"><a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202501/t20250117_1958327.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">49–244 亿元 / 年</div><div class="model-title">零售内容运营投入情景</div><p>社会消费品零售额 ¥48.79 万亿元 × 0.01%–0.05%；仅为可计价投入情景</p><small>应按门店数、客服量、商品上新频率和区域运营复杂度分层定价。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://www.stats.gov.cn/xxgk/sjfb/zxfb2020/202501/t20250117_1958327.html" target="_blank" rel="noopener">www.stats.gov.cn ↗</a></div><div>02 <a href="https://www.glean.com/solutions/industries/retail" target="_blank" rel="noopener">www.glean.com ↗</a></div><div>03 <a href="https://www.box.com/industries/retail" target="_blank" rel="noopener">www.box.com ↗</a></div><div>04 <a href="https://www.getguru.com/solutions" target="_blank" rel="noopener">www.getguru.com ↗</a></div><div>05 <a href="https://blog.box.com/ai-business-use-cases" target="_blank" rel="noopener">blog.box.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="education" style="--accent:#2563eb">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>教育、培训与高校</h3><p>“资料库 → 学习 / 教学工作台”最容易被理解，NotebookLM 是强参照，国内落地要重视内容版权与校内权限</p></div><div class="score"><strong>84</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">NotebookLM</span><span class="pill pill-core">Sana Agents</span></div><div class="pill-row support-row"><span class="pill pill-support">Glean</span><span class="pill pill-support">Guru</span><span class="pill pill-support">Box AI Agents</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>教师：教材、教案、课程标准 → 备课、题目、课堂活动与差异化讲义</p></div><div class="action"><span>02</span><p>学生：课程资料 → 学习指南、闪卡、测验、口试 / 辩论准备</p></div><div class="action"><span>03</span><p>高校科研：论文、项目材料、基金指南 → 研究综述与申请草稿</p></div><div class="action"><span>04</span><p>学校管理：制度、通知、应急预案 → 教职工与学生政策问答</p></div><div class="action"><span>05</span><p>企业培训：岗位知识、产品资料 → 课程编排、测验与培训效果跟踪</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">提升教师和研究人员准备效率</span><span class="pill pill-value">扩大优质课程内容复用</span><span class="pill pill-value">降低培训交付边际成本</span><span class="pill pill-value">让答案回到指定材料而不是泛化生成</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>6.89</b><span>万亿元</span><strong>全国教育经费总投入</strong><small>2024 年 · 其中财政性教育经费 5.42 万亿元</small><div class="fact-source"><a href="https://hudong.moe.gov.cn/srcsite/A05/s3040/202512/t20251231_1426092.html" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">69–345 亿元 / 年</div><div class="model-title">教育 AI 内容层投入情景</div><p>教育经费 ¥6.89 万亿元 × 0.1%–0.5%；比例是假设，不是教育 AI 市场统计</p><small>更现实的商业化路径是学校 / 教培机构 / 企业培训的项目合同 + 席位 + 私有知识库，而非单纯按学生人数收费。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（5）</summary><div class="source-list"><div>01 <a href="https://hudong.moe.gov.cn/srcsite/A05/s3040/202512/t20251231_1426092.html" target="_blank" rel="noopener">hudong.moe.gov.cn ↗</a></div><div>02 <a href="https://blog.google/products-and-platforms/products/education/higher-education-gemini-notebooklm/" target="_blank" rel="noopener">blog.google ↗</a></div><div>03 <a href="https://blog.google/products-and-platforms/products/education/customer-stories-gemini/" target="_blank" rel="noopener">blog.google ↗</a></div><div>04 <a href="https://sanalabs.com/agent-platform-solutions" target="_blank" rel="noopener">sanalabs.com ↗</a></div><div>05 <a href="https://www.fangcloud.com/cms/solution/" target="_blank" rel="noopener">www.fangcloud.com ↗</a></div></div></details>
+  </article><article class="industry-card" id="hr" style="--accent:#0891b2">
+    <div class="industry-head"><div><div class="eyebrow">P1 · 中国行业机会</div><h3>人力资源与组织运营（横向职能）</h3><p>它不是单一垂直行业，而是所有企业的横向预算入口；Sana / Guru / Glean 的组织级扩张通常从这里发生</p></div><div class="score"><strong>82</strong><span>/ 100<br>研究优先级</span></div></div>
+    <div class="industry-layout">
+      <div class="industry-main">
+        <div class="subhead">竞品覆盖</div><div class="pill-row"><span class="pill pill-core">Sana Agents</span><span class="pill pill-core">Guru</span><span class="pill pill-core">Glean</span></div><div class="pill-row support-row"><span class="pill pill-support">NotebookLM</span><span class="pill pill-support">Box AI Agents</span><span class="pill pill-support">亿方云</span></div>
+        <div class="subhead">AI 可以做什么</div><div class="action-list"><div class="action"><span>01</span><p>招聘：岗位说明书、简历、面试记录 → JD、面试摘要与候选人对比</p></div><div class="action"><span>02</span><p>员工服务：制度、福利、流程 → 权限化 HR 问答与工单分流</p></div><div class="action"><span>03</span><p>培训：岗位能力、课程、测验 → 个性化学习路径与知识检查</p></div><div class="action"><span>04</span><p>组织运营：会议、项目和制度变更 → 待办、通知与回写</p></div><div class="action"><span>05</span><p>HR 服务商：客户资料、交付模板、法规 → 项目交付与顾问知识复用</p></div></div>
+        <div class="subhead">价值落点</div><div class="value-tags"><span class="pill pill-value">降低 HR 服务台和培训成本</span><span class="pill pill-value">提升新人上手与政策一致性</span><span class="pill pill-value">把 HR 专家知识变成可规模化服务</span><span class="pill pill-value">以 HR / L&amp;D 作为跨部门扩张的低风险入口</span></div>
+      </div>
+      <aside class="industry-aside"><div class="subhead">中国行业底盘（事实）</div><div class="fact-grid"><div class="fact"><b>7.4</b><span>万家</span><strong>人力资源服务机构</strong><small>2024 年末 · 招聘、派遣、培训、猎头、外包、咨询等机构</small><div class="fact-source"><a href="https://chrm.mohrss.gov.cn/%E6%BF%80%E6%B4%BB%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90-%E6%B1%87%E8%81%9A%E5%8F%91%E5%B1%95%E5%8A%A8%E8%83%BD-%E5%8D%81%E5%9B%9B%E4%BA%94%E4%BB%A5%E6%9D%A5%E4%BA%BA/" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>109.3</b><span>万人</span><strong>人力资源服务业从业人员</strong><small>2024 年末 · 行业服务供给侧，不等于企业 HR 席位</small><div class="fact-source"><a href="https://chrm.mohrss.gov.cn/%E6%BF%80%E6%B4%BB%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90-%E6%B1%87%E8%81%9A%E5%8F%91%E5%B1%95%E5%8A%A8%E8%83%BD-%E5%8D%81%E5%9B%9B%E4%BA%94%E4%BB%A5%E6%9D%A5%E4%BA%BA/" target="_blank" rel="noopener">来源 ↗</a></div></div><div class="fact"><b>3.0</b><span>亿人次</span><strong>年度服务劳动者人次</strong><small>2024 年末 · 行业服务触达规模</small><div class="fact-source"><a href="https://chrm.mohrss.gov.cn/%E6%BF%80%E6%B4%BB%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90-%E6%B1%87%E8%81%9A%E5%8F%91%E5%B1%95%E5%8A%A8%E8%83%BD-%E5%8D%81%E5%9B%9B%E4%BA%94%E4%BB%A5%E6%9D%A5%E4%BA%BA/" target="_blank" rel="noopener">来源 ↗</a></div></div></div><div class="model-box"><div class="model-label">模型测算 · 商业价值空间</div><div class="model-value">15–148 亿元 / 年</div><div class="model-title">HR 服务机构订阅情景</div><p>7.4 万家机构 × ¥2 万–20 万 / 机构 / 年；价格是试点定价假设，不是行业收入统计</p><small>企业端更应按员工规模、知识库范围、HR 服务量和集成深度定价。</small></div></aside>
+    </div>
+    <details class="source-details"><summary>查看本卡片全部来源（4）</summary><div class="source-list"><div>01 <a href="https://chrm.mohrss.gov.cn/%E6%BF%80%E6%B4%BB%E4%BA%BA%E5%8A%9B%E8%B5%84%E6%BA%90-%E6%B1%87%E8%81%9A%E5%8F%91%E5%B1%95%E5%8A%A8%E8%83%BD-%E5%8D%81%E5%9B%9B%E4%BA%94%E4%BB%A5%E6%9D%A5%E4%BA%BA/" target="_blank" rel="noopener">chrm.mohrss.gov.cn ↗</a></div><div>02 <a href="https://sanalabs.com/products/sana/solutions/teams/in-house-operations" target="_blank" rel="noopener">sanalabs.com ↗</a></div><div>03 <a href="https://www.getguru.com/solutions" target="_blank" rel="noopener">www.getguru.com ↗</a></div><div>04 <a href="https://www.glean.com/solutions/industries/retail" target="_blank" rel="noopener">www.glean.com ↗</a></div></div></details>
+  </article></div></div></section>
         <section class="section" id="industry-coverage">
-          <div class="section-head"><div><h2>04-agent 产品行业覆盖范围</h2><p class="section-intro">按行业查看 Agent 已覆盖的业务对象、典型场景与代表产品；产品名称链接至公开产品页。</p></div><div class="benchmark-tools"><div class="benchmark-switch" role="tablist" aria-label="Agent 产品行业覆盖范围"><button class="benchmark-switch-btn active" type="button" data-industry-tab="overseas" role="tab" aria-selected="true">海外</button><button class="benchmark-switch-btn" type="button" data-industry-tab="domestic" role="tab" aria-selected="false">国内</button></div></div></div>
+          <div class="section-head"><div><h2>02.2 Agent 产品行业覆盖范围</h2><p class="section-intro">按行业查看 Agent 已覆盖的业务对象、典型场景与代表产品；产品名称链接至公开产品页。</p></div><div class="benchmark-tools"><div class="benchmark-switch" role="tablist" aria-label="Agent 产品行业覆盖范围"><button class="benchmark-switch-btn active" type="button" data-industry-tab="overseas" role="tab" aria-selected="true">海外</button><button class="benchmark-switch-btn" type="button" data-industry-tab="domestic" role="tab" aria-selected="false">国内</button></div></div></div>
           <div class="industry-coverage-panels">
             <div class="benchmark-panel active" data-industry-panel="overseas">
               <div class="panel matrix-wrap"><table class="matrix"><thead><tr><th>产品</th><th>法律</th><th>金融</th><th>制造</th><th>医疗</th><th>零售</th><th>教育</th><th>软件 / IT</th><th>科研 / 投研</th><th>建筑</th><th>HR</th></tr></thead><tbody>
@@ -1264,11 +1454,19 @@
       if (next) editable[0]?.focus();
     });
 
-    const tocLinks = [...document.querySelectorAll('.toc a')];
+    const tocLinks = [...document.querySelectorAll('.toc a:not([data-research-target])')];
+    let selectedResearchSub = null;
+    tocLinks.forEach((link) => link.addEventListener('click', () => { selectedResearchSub = null; }));
     const sections = tocLinks.map((link) => document.querySelector(link.getAttribute('href'))).filter(Boolean);
     const observer = new IntersectionObserver((entries) => {
       const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
       if (!visible) return;
+      if (visible.target.id === 'user-scenarios' && selectedResearchSub) {
+        tocLinks.forEach((link) => link.classList.remove('active'));
+        selectedResearchSub.classList.add('active');
+        return;
+      }
+      selectedResearchSub = null;
       tocLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === '#' + visible.target.id));
     }, { rootMargin: '-18% 0px -65% 0px', threshold: [0, .15, .5] });
     sections.forEach((section) => observer.observe(section));
@@ -1362,6 +1560,23 @@
           if (prefix && !title.textContent.trim().startsWith(prefix)) {
             title.textContent = `${prefix} ${title.textContent.trim()}`;
           }
+        });
+        shadow.querySelectorAll('.section-head').forEach((head) => {
+          const section = head.closest('section');
+          if (!section?.id) return;
+          const link = document.querySelector(`[data-research-target="${section.id}"]`);
+          if (link) link.setAttribute('aria-label', `${link.textContent.trim()}，定位到研究内容`);
+        });
+        document.querySelectorAll('[data-research-target]').forEach((link) => {
+          link.addEventListener('click', (event) => {
+            const target = shadow.getElementById(link.dataset.researchTarget);
+            if (!target) return;
+            event.preventDefault();
+            selectedResearchSub = link;
+            document.querySelectorAll('.toc a').forEach((item) => item.classList.remove('active'));
+            link.classList.add('active');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
         });
         const workIntensityTable = shadow.querySelector('#part2 > .table-wrap');
         const quadrant = shadow.querySelector('#matrix > .quadrant');
@@ -1505,6 +1720,52 @@
         anchor = line;
       });
     });
+
+    // Render the benchmark cards with the same fact-card hierarchy as the supplied source file.
+    const benchmarkFacts = {
+      'Glean': { accent: '#6366f1', what: '把企业内部多个系统的知识、权限和上下文连接起来，提供企业搜索、问答和可执行 Agent。', audience: '全体员工、IT 管理员、知识管理员；购买者通常是 CIO / IT、知识管理和业务部门。', scenes: ['跨 Drive、SharePoint、Slack、CRM 等系统检索知识，并继承源系统权限。', '员工查询福利、流程和制度，返回带来源的答案并减少服务台重复工作。', '从知识检索进入任务创建、信息回写、通知和部门 Agent。'], metrics: [['2019', '成立年份'], ['1000+', '客户企业'], ['$4.6B', '估值（2024）']], commercial: [['$300M+', 'ARR'], ['45%', 'wDAU / wMAU'], ['85%+', '客户跨 5+ 部门使用']], website: 'https://www.glean.com/', source: 'https://www.glean.com/press/glean-surpasses-300m-arr-unrivaled-enterprise-context-fuels-ai-adoption' },
+      'Guru': { accent: '#14b8a6', what: '知识治理和团队知识助手，让答案经过验证、有人负责，并嵌入客服、销售、HR 和运营工作流。', audience: '客服、销售、HR、运营和知识负责人；购买者通常是知识管理、支持、运营和 IT。', scenes: ['在 Slack、浏览器或客服工作流中提供经过验证的答案，减少重复提问。', '把产品、竞品、案例和定价知识整理成销售现场可用的回答。', '把 SOP、故障排查和安全规范变成可验证的现场知识，并提醒内容过期。'], metrics: [['2013', '成立年份'], ['300+', '历史付费客户（2023）'], ['未公开', '用户总量']], commercial: [['$9.3M', 'Series A'], ['$25M', 'Series B'], ['未公开', '独立收入']], website: 'https://www.getguru.com/', source: 'https://www.getguru.com/about' },
+      'Box AI Agents': { accent: '#0ea5e9', what: '把 AI 嵌入企业内容管理平台，围绕文件问答、批量抽取、分类、合规和内容流程执行。', audience: '法务、采购、HR、研发、合规和知识工作者；购买者通常是 CIO、内容管理和安全部门。', scenes: ['从受控文件夹批量抽取合同义务、风险、到期日和监管材料。', '围绕临床、注册、质量和研究文档进行摘要、分类、检索和流程协作。', '用 AI Studio 和 Agents 对文件分类、抽取字段、生成内容并回写企业流程。'], metrics: [['2005', '成立年份'], ['115,000+', '企业客户'], ['$1.10B', 'FY2025 营收']], commercial: [['$1.177B', 'FY2026 营收'], ['$1.7B', 'FY2026 RPO'], ['10%', 'Enterprise Advanced 收入占比']], website: 'https://www.box.com/agents', source: 'https://www.boxinvestorrelations.com/financials/quarterly-results/default.aspx' },
+      'Sana Agents': { accent: '#eab308', what: '面向部门和业务团队的工作流 Agent 平台，从学习、HR、运营和业务知识任务切入。', audience: 'HR / L&D、运营、销售运营、IT 和业务专家；购买者通常是部门负责人、HR / IT 和创新团队。', scenes: ['把课程、岗位资料和制度转换为学习路径、问答、测验和培训内容。', '根据岗位和面试材料生成 JD、面试摘要、员工问答和入职支持。', '连接 CRM、Drive、SharePoint 等资料，完成报告提取、尽调和部门流程。'], metrics: [['2016', '成立年份'], ['未公开', '客户 / 用户数量'], ['$130M+', '累计融资']], commercial: [['$34M', 'Series B'], ['未公开', '收入'], ['未公开', '估值']], website: 'https://sanalabs.com/', source: 'https://sanalabs.com/agent-platform-solutions' },
+      'NotebookLM': { accent: '#2563eb', what: '以 Notebook 为项目容器的资料研究和学习助手，回答限定在用户提供的来源内并保留引用。', audience: '研究者、产品 / 市场团队、咨询顾问、学生和培训人员；也服务团队管理员和企业客户。', scenes: ['上传论文、访谈、竞品资料和会议记录，在一个 Notebook 内追问并定位引用。', '根据教材和课程资料生成学习指南、闪卡、测验和复习重点。', '把限定资料转成 briefing、FAQ、时间线或 Audio Overview，便于团队共享。'], metrics: [['2023', '首次发布'], ['30M+', '个人用户'], ['600k+', '组织用户']], commercial: [['$9', '企业版 / 用户 / 月'], ['未公开', '独立收入'], ['未公开', '企业席位数']], website: 'https://notebooklm.google.com/', source: 'https://blog.google/innovation-and-ai/products/gemini-notebook/notebooklm-gemini-notebook/' },
+      'Hebbia': { accent: '#8b5cf6', what: '面向投研、尽调、咨询和战略团队的复杂文档分析工作台，擅长多文档批量比较和结构化研究。', audience: 'PE / VC、资管、投行、咨询、法律和企业战略团队；购买者是研究 / 投资负责人。', scenes: ['按统一问题矩阵批量读取财务、合同、市场和运营资料，输出比较表。', '从财报、公告和行业资料中提取指标，比较公司并生成研究 memo。', '基于访谈、项目文件和公开资料形成有证据链的分析和交付初稿。'], metrics: [['2020', '成立年份'], ['200,000', '每日 prompts'], ['1.5B', '已处理页面']], commercial: [['$130M', '累计融资'], ['$700M', '估值（2024）'], ['$30T', '使用机构管理资产规模']], website: 'https://www.hebbia.com/', source: 'https://www.hebbia.com/about' },
+      'Harvey': { accent: '#f97316', what: '面向法律和专业服务团队的垂直 AI 工作台，重点处理合同、尽调、诉讼和合规材料。', audience: '律师、企业法务、交易 / 投研团队；购买者是律所管理层、GC、知识管理和 IT。', scenes: ['把合同、披露文件和问卷放入项目空间，批量抽取条款、义务和风险。', '识别非标准条款，对照 playbook 生成修改建议和谈判问题清单。', '基于历史案件、政策和模板回答问题，生成 matter 摘要和下一步任务。'], metrics: [['2022', '成立年份'], ['1300+', '家组织'], ['100,000+', '名律师用户']], commercial: [['$300M', '融资轮次（2025）'], ['$5B', '估值（2025）'], ['未公开', '独立收入']], website: 'https://www.harvey.ai/', source: 'https://www.reuters.com/technology/ai-startup-harvey-valued-5-billion-after-latest-funding-round-2025-07-23/' },
+      'Salesforce Agentforce': { accent: '#0ea5e9', what: '嵌入 CRM 的销售、客服与客户成功执行 Agent 平台，围绕客户上下文完成可追踪动作。', audience: '销售、客服、营销和客户成功团队；购买者通常是 CRM、收入运营和服务负责人。', scenes: ['基于客户上下文回答销售和客服问题，并推荐下一步动作。', '自动创建任务、更新商机或服务记录，保持 CRM 数据完整。', '跨渠道处理客户请求，将复杂问题转交人工并记录处理结果。'], metrics: [['2024', 'Agentforce 发布'], ['$37.9B', 'FY2025 公司营收'], ['未拆分', 'Agentforce 独立收入']], commercial: [['未公开', 'Agentforce 客户数'], ['未公开', 'Agentforce ARR'], ['未公开', '单独估值']], website: 'https://www.salesforce.com/agentforce/', source: 'https://investor.salesforce.com/financials/' },
+      '合思 Agent': { accent: '#2563eb', what: '面向企业费用、报销与付款流程的财务工作流 Agent。', audience: 'CFO、财务共享中心、审核与应付团队。', scenes: ['抽取和验真票据，匹配费用制度并标记异常。', '将报销单分派到对应审核人，追踪补充材料和审批状态。', '生成凭证或档案并与银行、ERP 和付款流程衔接。'], metrics: [['2009', '公司成立年份'], ['7000+', '付费企业'], ['300万+', '用户']], commercial: [['未拆分', 'Agent 收入'], ['未公开', '单客年费'], ['未公开', 'Agent 客户数']], website: 'https://www.ekuaibao.com/', source: 'https://www.ekuaibao.com/' },
+      '金蝶苍穹 / Cosmic': { accent: '#0f766e', what: '嵌入 ERP 的企业经营管理与流程执行 Agent。', audience: '经营管理者、财务、人力与供应链负责人。', scenes: ['围绕经营数据问答，解释指标口径和异常变化。', '结合规则与主数据生成预算、采购或人力分析建议。', '发起审批、业务流程并将结果回写 ERP，保留权限与审计记录。'], metrics: [['1993', '金蝶成立年份'], ['上市公司', '母公司状态'], ['未公开', 'Cosmic 客户数']], commercial: [['未公开', 'Agent 收入'], ['未公开', 'Cosmic ARR'], ['未公开', '独立估值']], website: 'https://www.kingdee.com/cn', source: 'https://www.kingdee.com/cn' },
+      '阿里国际站 Accio': { accent: '#f97316', what: '面向跨境采购的商品与供应商研究 Agent。', audience: '跨境采购商、外贸创业者和中小企业经营者。', scenes: ['输入采购需求，澄清规格、数量、交付地和预算。', '检索全球供给，筛选供应商并比较商品、价格和认证。', '生成候选清单与询盘草稿，进入后续沟通和采购流程。'], metrics: [['2024', '产品推出'], ['未公开', '用户 / 买家数量'], ['全球供给', '平台网络']], commercial: [['未披露', '独立收入'], ['未公开', '付费买家数'], ['未公开', '独立估值']], website: 'https://www.accio.com/', source: 'https://www.accio.com/' },
+      'OKKI AI': { accent: '#7c3aed', what: '面向外贸销售的 CRM 与多渠道触达 Copilot。', audience: '外贸销售、销售经理和企业负责人。', scenes: ['汇总客户、询盘和商机信息，生成客户画像与跟进优先级。', '根据产品、客户和历史沟通生成多语言邮件和触达内容。', '提醒下一步跟进并维护商机阶段、报价和客户记录。'], metrics: [['未公开', '成立年份'], ['未公开', '客户企业数'], ['CRM 基盘', '客户与商机数据']], commercial: [['未披露', 'AI 收入'], ['未公开', '付费席位'], ['未公开', '独立估值']], website: 'https://www.okki.com/', source: 'https://www.okki.com/' },
+      '纷享销客 ShareAI': { accent: '#2563eb', what: '嵌入 B2B CRM 的销售流程与客户运营 Agent。', audience: '销售代表、销售主管、销售运营和客户成功团队。', scenes: ['会前汇总客户历史、商机阶段和风险，生成拜访准备。', '从会议或客户行为中提炼意图，生成纪要和下一步动作。', '将任务、跟进结果和客户状态自动回写 CRM，保持团队协同。'], metrics: [['2011', '公司成立年份'], ['未公开', '客户企业数'], ['B2B', '行业化方案']], commercial: [['未披露', 'AI 收入'], ['未公开', '付费席位'], ['未公开', '独立估值']], website: 'https://www.fxiaoke.com/', source: 'https://www.fxiaoke.com/' },
+      '讯飞晓医': { accent: '#0ea5e9', what: '面向公众健康咨询与就医导航的医疗知识助手。', audience: '患者、家属及需要健康信息查询的人群；诊疗判断仍由医生承担。', scenes: ['根据症状和健康问题提供疾病知识解释与风险提示。', '帮助用户理解检查报告、药品说明和就医准备事项。', '结合科室、地区和病情信息提供就医路径与健康管理建议。'], metrics: [['2023', '产品发布年份'], ['未公开', '用户数量'], ['App / 小程序', '产品形态']], commercial: [['未公开', '独立收入'], ['未公开', '付费用户'], ['未公开', '独立估值']], website: 'https://www.iflytek.com/', source: 'https://www.iflytek.com/' },
+      '法大大 iTerms': { accent: '#b45309', what: '连接电子签与合同生命周期管理的法律审查 Agent。', audience: '法务、合同管理员及销售 / 采购运营人员。', scenes: ['抽取合同主体、期限、付款和关键义务，形成结构化台账。', '对照企业合同规则识别风险条款，引用依据并生成修改建议。', '比较版本、提醒履约节点并将结果回写合同管理流程。'], metrics: [['2014', '法大大成立年份'], ['10万+', '公司全球客户'], ['2022', 'iTerms 发布']], commercial: [['未披露', '独立收入'], ['未公开', '付费企业数'], ['未公开', '独立估值']], website: 'https://www.iterms.com/', source: 'https://www.iterms.com/' },
+      '同花顺问财': { accent: '#7c3aed', what: '面向金融数据检索与选股研究的自然语言问答产品。', audience: '个人投资者、投顾和证券研究人员。', scenes: ['用自然语言描述条件，解析指标口径和时间范围。', '按条件筛选股票、基金或行业，并展示可追溯数据来源。', '对筛选结果进行横向比较，辅助研究而不替代投资决策。'], metrics: [['1995', '同花顺成立年份'], ['上市公司', '母公司状态'], ['未公开', '问财用户数']], commercial: [['未拆分', '问财收入'], ['未公开', '付费用户'], ['未公开', '独立估值']], website: 'https://www.iwencai.com/home/index', source: 'https://www.iwencai.com/home/index' },
+      '鼎捷雅典娜': { accent: '#0f766e', what: '嵌入制造 ERP / MES 的生产运营与异常处置 Agent。', audience: '厂长、计划、设备、质量和工程团队。', scenes: ['发现生产、质量或设备异常，检索关联 SOP 和历史案例。', '辅助根因分析，生成工单、排产或质量处置建议。', '跟踪工单结果与现场反馈，沉淀可复用的制造知识。'], metrics: [['1982', '鼎捷成立年份'], ['上市公司', '母公司状态'], ['ERP / MES', '制造数据底座']], commercial: [['未拆分', 'AI 收入'], ['未公开', 'Agent 客户数'], ['未公开', '独立估值']], website: 'https://www.digiwin.com/', source: 'https://www.digiwin.com/' }
+    };
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    document.querySelectorAll('[data-benchmark-panel]').forEach((panel) => {
+      panel.querySelectorAll('.benchmark-card:not(.industry-card)').forEach((card, index) => {
+        const name = card.querySelector('.card-top h3')?.textContent.trim();
+        const fact = benchmarkFacts[name];
+        if (!fact) return;
+        const existingLink = card.querySelector('.card-top h3 a');
+        const website = fact.website || existingLink?.href || '#';
+        const tag = card.querySelector('.card-top .tag')?.outerHTML || '<span class="tag">F2</span>';
+        const type = card.querySelector('.card-kicker')?.textContent.trim() || '行业 Agent';
+        const metrics = [...(fact.metrics || []), ...(fact.commercial || [])].slice(0, 6);
+        const scenes = (fact.scenes || []).slice(0, 3);
+        const metricBlock = (label, values) => `<div class="data-block"><div class="data-label">${label}</div><div class="number-grid">${values.map(([value, labelText]) => `<div class="number-item"><strong>${escapeHtml(value)}</strong><span>${escapeHtml(labelText)}</span></div>`).join('')}</div><div class="data-source"><a href="${fact.source || website}" target="_blank" rel="noreferrer">来源 ↗</a></div></div>`;
+        card.style.setProperty('--card-accent', fact.accent || '#2563eb');
+        card.innerHTML = `<div class="card-top"><div><div class="number">${String(index + 1).padStart(2, '0')}</div><h3><a href="${website}" target="_blank" rel="noreferrer">${escapeHtml(name)}</a></h3><div class="type">${escapeHtml(type)}</div></div>${tag}</div><div class="what-box"><div class="data-label">这个产品是什么</div><p>${escapeHtml(fact.what)}</p></div><div class="audience-box"><div class="data-label">用户人群</div><p>${escapeHtml(fact.audience)}</p></div><div class="scene-block"><div class="data-label">具体使用场景</div><div class="scene-list">${scenes.map((scene, sceneIndex) => `<div class="scene-item"><b>${String(sceneIndex + 1).padStart(2, '0')}</b><span>${escapeHtml(scene)}</span></div>`).join('')}</div></div>${metricBlock('用户 / 客户规模', metrics.slice(0, 3))}${metricBlock('商业数据', metrics.slice(3, 6))}<div class="card-links"><a href="${website}" target="_blank" rel="noreferrer">官网 ↗</a> · <a href="${fact.source || website}" target="_blank" rel="noreferrer">核心来源 ↗</a></div>`;
+      });
+    });
+
+    // Keep the positioning section's narrative order: task taxonomy first, visual comparison second.
+    const positioningSection = document.querySelector('#positioning');
+    const positioningTable = positioningSection?.querySelector('.positioning-data');
+    const positioningPlot = positioningSection?.querySelector('.plot-wrap');
+    if (positioningTable && positioningPlot) positioningPlot.before(positioningTable);
+    const coverageSection = document.querySelector('#industry-coverage');
+    if (positioningSection && coverageSection) positioningSection.before(coverageSection);
   </script>
 </body>
 </html>
