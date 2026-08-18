@@ -1363,6 +1363,12 @@
             title.textContent = `${prefix} ${title.textContent.trim()}`;
           }
         });
+        const workIntensityTable = shadow.querySelector('#part2 > .table-wrap');
+        const quadrant = shadow.querySelector('#matrix > .quadrant');
+        if (workIntensityTable && quadrant) {
+          workIntensityTable.classList.add('work-intensity-table');
+          quadrant.before(workIntensityTable);
+        }
         shadow.querySelectorAll('.scene-card').forEach((card) => {
           const sceneId = card.querySelector('.scene-id');
           const title = card.querySelector('h3');
