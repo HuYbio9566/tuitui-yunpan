@@ -1352,6 +1352,14 @@
             title.textContent = `${prefix} ${title.textContent.trim()}`;
           }
         });
+        shadow.querySelectorAll('.scene-card').forEach((card) => {
+          const sceneId = card.querySelector('.scene-id');
+          const title = card.querySelector('h3');
+          const number = sceneId?.textContent.trim().match(/\d+/)?.[0];
+          if (!sceneId || !title || !number) return;
+          sceneId.remove();
+          title.textContent = `${number.padStart(2, '0')} / ${title.textContent.trim()}`;
+        });
         host.classList.add('is-loaded');
       } catch (error) {
         host.innerHTML = '<div class="research-error">用户场景需求研究加载失败，请直接打开同目录下的“行业需求横扫.html”。</div>';
