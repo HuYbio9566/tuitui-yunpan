@@ -1303,8 +1303,8 @@
           .nav { display:none!important; }
           .wrap { width:100%!important; max-width:none!important; margin:0!important; padding:0 0 18px!important; }
           h1,h2,h3,h4 { color:var(--text)!important; letter-spacing:0!important; }
-          h1 { font-size:20px!important; line-height:1.5!important; margin:0 0 12px!important; }
-          .lead { font-size:16px!important; line-height:1.6!important; }
+          h1 { font-size:20px!important; line-height:1.5!important; margin:0 0 12px!important; max-width:none!important; white-space:normal!important; }
+          .lead { font-size:16px!important; line-height:1.6!important; max-width:none!important; width:100%!important; white-space:normal!important; }
           .section-head { display:block!important; margin-bottom:18px!important; }
           .section-head > .section-desc { margin-top:7px!important; max-width:none!important; text-align:left!important; }
           .section-head h2 { font-size:20px!important; line-height:1.45!important; }
@@ -1325,6 +1325,8 @@
         if (!wrap) throw new Error('原稿缺少 .wrap 容器');
         body.append(wrap.cloneNode(true));
         shadow.append(style, theme, body);
+
+        shadow.querySelectorAll('#hero h1 br').forEach((lineBreak) => lineBreak.replaceWith(' '));
 
         const labels = [
           ['PART 01', '01.1 依赖知识 / 文件的工作'],
